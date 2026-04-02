@@ -1,0 +1,25 @@
+{
+  "name": "SPB Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "kilocode.kilo-code",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "remoteUser": "node"
+}

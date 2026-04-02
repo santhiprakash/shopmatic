@@ -7,6 +7,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
   avatar?: string;
   plan: 'free' | 'pro' | 'enterprise';
   role: UserRole;
@@ -46,42 +48,10 @@ const DEMO_USER: User = {
   isDemo: true,
 };
 
-// Mock user database (in real app this would be backend API calls)
-const MOCK_USERS = [
-  {
-    id: '1',
-    email: 'user@example.com',
-    password: 'password123', // In real app, this would be hashed
-    name: 'John Doe',
-    plan: 'free' as const,
-    role: 'affiliate_marketer' as const,
-    createdAt: new Date('2024-01-01'),
-    lastLoginAt: new Date(),
-  },
-  {
-    id: '2',
-    email: 'pro@example.com',
-    password: 'password123',
-    name: 'Jane Smith',
-    plan: 'pro' as const,
-    role: 'affiliate_marketer' as const,
-    createdAt: new Date('2024-01-01'),
-    lastLoginAt: new Date(),
-  },
-  {
-    id: 'admin-1',
-    email: 'admin@ecomjunction.com',
-    password: 'admin123',
-    name: 'Admin User',
-    plan: 'enterprise' as const,
-    role: 'admin' as const,
-    createdAt: new Date('2024-01-01'),
-    lastLoginAt: new Date(),
-  },
-];
-
 const AUTH_STORAGE_KEY = 'shopmatic_auth';
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, setAuthState] = useState<AuthState>({
@@ -91,7 +61,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isDemo: false,
   });
 
-  // Check for existing session on mount
   useEffect(() => {
     checkExistingSession();
   }, []);
@@ -107,14 +76,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const sessionData = JSON.parse(stored);
       const now = Date.now();
 
-      // Check if session is expired
       if (now > sessionData.expiresAt) {
         localStorage.removeItem(AUTH_STORAGE_KEY);
         setAuthState(prev => ({ ...prev, isLoading: false }));
         return;
       }
 
-      // Validate session integrity
       const expectedHash = await SecurityUtils.createHash(
         sessionData.user.id + sessionData.user.email + sessionData.timestamp
       );
@@ -126,7 +93,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      // Restore session
+      // Verify token is still valid with backend
+      if (sessionData.token) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+            headers: {
+              'Authorization': `Bearer ${sessionData.token}`,
+            },
+          });
+
+          if (!response.ok) {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            setAuthState(prev => ({ ...prev, isLoading: false }));
+            return;
+          }
+
+          const apiUser = await response.json();
+          const user = mapApiUserToUser(apiUser);
+
+          setAuthState({
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+            isDemo: false,
+          });
+
+          // Update stored session
+          await saveSession(user, sessionData.token);
+          return;
+        } catch (error) {
+          console.error('Token validation failed:', error);
+          // Continue with stored session if API call fails
+        }
+      }
+
       setAuthState({
         user: {
           ...sessionData.user,
@@ -145,17 +145,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const saveSession = async (user: User) => {
+  const mapApiUserToUser = (apiUser: any): User => {
+    return {
+      id: apiUser.id,
+      email: apiUser.email,
+      name: apiUser.firstName && apiUser.lastName 
+        ? `${apiUser.firstName} ${apiUser.lastName}` 
+        : apiUser.firstName || apiUser.email.split('@')[0],
+      firstName: apiUser.firstName,
+      lastName: apiUser.lastName,
+      avatar: apiUser.avatarUrl,
+      plan: apiUser.subscriptionPlan || 'free',
+      role: apiUser.role || 'affiliate_marketer',
+      createdAt: new Date(apiUser.createdAt),
+      lastLoginAt: new Date(),
+      isDemo: false,
+    };
+  };
+
+  const saveSession = async (user: User, token?: string) => {
     const timestamp = Date.now();
     const expiresAt = timestamp + SESSION_DURATION;
     
-    // Create session hash for integrity
     const hash = await SecurityUtils.createHash(
       user.id + user.email + timestamp
     );
 
     const sessionData = {
       user,
+      token,
       timestamp,
       expiresAt,
       hash,
@@ -167,29 +185,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string): Promise<void> => {
     setAuthState(prev => ({ ...prev, isLoading: true }));
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     try {
-      // Find user in mock database
-      const mockUser = MOCK_USERS.find(u => u.email === email);
-      
-      if (!mockUser || mockUser.password !== password) {
-        throw new Error('Invalid email or password');
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
       }
 
-      const user: User = {
-        id: mockUser.id,
-        email: mockUser.email,
-        name: mockUser.name,
-        plan: mockUser.plan,
-        role: mockUser.role,
-        createdAt: mockUser.createdAt,
-        lastLoginAt: new Date(),
-        isDemo: false,
-      };
-
-      await saveSession(user);
+      const user = mapApiUserToUser(data.user);
+      await saveSession(user, data.token);
 
       setAuthState({
         user,
@@ -210,50 +222,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (email: string, password: string, name: string): Promise<void> => {
     setAuthState(prev => ({ ...prev, isLoading: true }));
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     try {
-      // Check if user already exists
-      const existingUser = MOCK_USERS.find(u => u.email === email);
-      if (existingUser) {
-        throw new Error('User with this email already exists');
-      }
+      // Split name into first and last
+      const nameParts = name.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
 
-      // Create new user
-      const newUser: User = {
-        id: SecurityUtils.generateSecureRandom(16),
-        email,
-        name,
-        plan: 'free',
-        role: 'affiliate_marketer', // Default role for new users
-        createdAt: new Date(),
-        lastLoginAt: new Date(),
-        isDemo: false,
-      };
-
-      // In real app, would save to backend
-      MOCK_USERS.push({
-        id: newUser.id,
-        email,
-        password, // Would be hashed in real app
-        name,
-        plan: 'free',
-        role: 'affiliate_marketer',
-        createdAt: newUser.createdAt,
-        lastLoginAt: newUser.lastLoginAt,
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email, 
+          password, 
+          firstName,
+          lastName,
+        }),
       });
 
-      await saveSession(newUser);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      const user = mapApiUserToUser(data.user);
+      await saveSession(user, data.token);
 
       setAuthState({
-        user: newUser,
+        user,
         isAuthenticated: true,
         isLoading: false,
         isDemo: false,
       });
 
-      toast.success(`Welcome to Shopmatic, ${name}!`);
+      toast.success(`Welcome to eComJunction, ${name}!`);
     } catch (error) {
       setAuthState(prev => ({ ...prev, isLoading: false }));
       const message = error instanceof Error ? error.message : 'Registration failed';
@@ -270,13 +274,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isDemo: true,
     });
 
-    // Don't save demo session to localStorage
-    toast.success('Welcome to the Shopmatic demo!', {
+    toast.success('Welcome to the eComJunction demo!', {
       description: 'You can explore all features. Data will not be saved.',
     });
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (stored) {
+        const sessionData = JSON.parse(stored);
+        if (sessionData.token) {
+          await fetch(`${API_BASE_URL}/api/auth/logout`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${sessionData.token}`,
+            },
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+    }
+
     localStorage.removeItem(AUTH_STORAGE_KEY);
     setAuthState({
       user: null,
@@ -288,18 +308,60 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateProfile = async (updates: Partial<User>): Promise<void> => {
-    if (!authState.user) {
+    if (!authState.user || !authState.isAuthenticated) {
       throw new Error('No user logged in');
+    }
+
+    if (authState.isDemo) {
+      // Update locally for demo mode
+      const updatedUser = { ...authState.user, ...updates };
+      setAuthState(prev => ({
+        ...prev,
+        user: updatedUser,
+      }));
+      toast.success('Profile updated successfully');
+      return;
     }
 
     setAuthState(prev => ({ ...prev, isLoading: true }));
 
     try {
-      const updatedUser = { ...authState.user, ...updates };
-      
-      if (!authState.isDemo) {
-        await saveSession(updatedUser);
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      const sessionData = stored ? JSON.parse(stored) : null;
+      const token = sessionData?.token;
+
+      if (!token) {
+        throw new Error('Not authenticated');
       }
+
+      // Convert to API format
+      const apiUpdates: any = {};
+      if (updates.firstName) apiUpdates.firstName = updates.firstName;
+      if (updates.lastName) apiUpdates.lastName = updates.lastName;
+      if (updates.name) {
+        const nameParts = updates.name.split(' ');
+        apiUpdates.firstName = nameParts[0];
+        apiUpdates.lastName = nameParts.slice(1).join(' ');
+      }
+      if (updates.avatar) apiUpdates.avatarUrl = updates.avatar;
+
+      const response = await fetch(`${API_BASE_URL}/api/users/${authState.user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(apiUpdates),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Profile update failed');
+      }
+
+      const updatedUser = mapApiUserToUser(data);
+      await saveSession(updatedUser, token);
 
       setAuthState(prev => ({
         ...prev,
@@ -317,18 +379,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resetPassword = async (email: string): Promise<void> => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
-    // Check if user exists
-    const userExists = MOCK_USERS.some(u => u.email === email);
-    
-    if (!userExists) {
-      throw new Error('No account found with this email address');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Password reset failed');
+      }
+
+      toast.success('Password reset link sent to your email!');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Password reset failed';
+      toast.error(message);
+      throw error;
     }
-
-    // In real app, would send reset email
-    toast.success('Password reset link sent to your email!');
   };
 
   const contextValue: AuthContextType = {

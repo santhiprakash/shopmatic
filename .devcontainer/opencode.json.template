@@ -1,0 +1,93 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "spb-zai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SPB Z.AI",
+      "options": {
+        "apiKey": "${ZAI_API_KEY}",
+        "baseURL": "https://api.z.ai/api/coding/paas/v4"
+      },
+      "models": {
+        "glm-5.1": {
+          "name": "SPB GLM-5.1",
+          "limit": { "context": 202800, "output": 16384 }
+        },
+        "glm-5-turbo": {
+          "name": "SPB GLM-5 Turbo",
+          "limit": { "context": 202800, "output": 16384 }
+        },
+        "glm-5": {
+          "name": "SPB GLM-5",
+          "limit": { "context": 202800, "output": 16384 }
+        }
+      }
+    },
+    "spb-minimax": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SPB MiniMax",
+      "options": {
+        "apiKey": "${MINIMAX_API_KEY}",
+        "baseURL": "https://api.minimax.io/v1"
+      },
+      "models": {
+        "MiniMax-M2.7": {
+          "name": "SPB MiniMax M2.7",
+          "limit": { "context": 204800, "output": 16384 }
+        },
+        "MiniMax-M2.5": {
+          "name": "SPB MiniMax M2.5",
+          "limit": { "context": 204800, "output": 16384 }
+        }
+      }
+    },
+    "spb-nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SPB Nvidia",
+      "options": {
+        "apiKey": "${NVIDIA_API_KEY}",
+        "baseURL": "https://integrate.api.nvidia.com/v1"
+      },
+      "models": {
+        "moonshotai/kimi-k2.5": {
+          "name": "SPB Kimi K2.5",
+          "limit": { "context": 262000, "output": 16384 }
+        }
+      }
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "enabled": true
+    },
+    "sequentialthinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": true
+    },
+    "brave-search": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-brave-search"],
+      "environment": { "BRAVE_API_KEY": "${BRAVE_API_KEY}" },
+      "enabled": true
+    }
+  },
+  "permission": {
+    "bash": "allow",
+    "read": "allow",
+    "edit": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "skill": "allow",
+    "task": "allow",
+    "external_directory": "allow"
+  }
+}

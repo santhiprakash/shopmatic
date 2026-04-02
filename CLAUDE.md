@@ -8,15 +8,27 @@ eComJunction is a SAAS platform for influencers and affiliate marketers to showc
 
 ## Development Commands
 
-### Core Commands
-- `npm run dev` - Start development server on port 8080
-- `npm run build` - Build for production
-- `npm run build:dev` - Build in development mode
+### Core Commands (Frontend)
+- `npm run dev` - Start frontend development server on port 8080
+- `npm run build` - Build frontend for production
 - `npm run lint` - Run ESLint
 - `npm run preview` - Preview production build
 
-### Development Server
-The development server runs on port 8080 (not the default 5173) as configured in vite.config.ts.
+### Backend Commands
+- `npm run dev:server` - Start backend API server on port 3001
+- `npm run dev:full` - Start both frontend and backend concurrently
+- `npm run server:install` - Install backend dependencies
+- `npm run server:start` - Start backend production server
+
+### Database Commands
+- `npm run db:migrate` - Run database migrations
+- `npm run db:migrate-safe` - Run missing tables only
+- `npm run db:test` - Test database connection
+- `npm run db:seed` - Seed demo data
+
+### Development Server Ports
+- Frontend: http://localhost:8080
+- Backend API: http://localhost:3001
 
 ## Architecture
 
