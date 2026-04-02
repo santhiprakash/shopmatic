@@ -204,6 +204,158 @@ export interface Database {
           created_at?: string;
         };
       };
+      pages: {
+        Row: {
+          id: string;
+          user_id: string;
+          slug: string;
+          title: string;
+          description: string | null;
+          bio: string | null;
+          avatar_url: string | null;
+          cover_image_url: string | null;
+          theme_settings: Record<string, any> | null;
+          social_links: Record<string, any> | null;
+          is_active: boolean;
+          is_public: boolean;
+          view_count: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          slug: string;
+          title: string;
+          description?: string | null;
+          bio?: string | null;
+          avatar_url?: string | null;
+          cover_image_url?: string | null;
+          theme_settings?: Record<string, any> | null;
+          social_links?: Record<string, any> | null;
+          is_active?: boolean;
+          is_public?: boolean;
+          view_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          slug?: string;
+          title?: string;
+          description?: string | null;
+          bio?: string | null;
+          avatar_url?: string | null;
+          cover_image_url?: string | null;
+          theme_settings?: Record<string, any> | null;
+          social_links?: Record<string, any> | null;
+          is_active?: boolean;
+          is_public?: boolean;
+          view_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      page_collaborators: {
+        Row: {
+          id: string;
+          page_id: string;
+          user_id: string;
+          role: 'owner' | 'admin' | 'editor' | 'viewer';
+          invited_by: string | null;
+          invited_at: string;
+          accepted_at: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          page_id: string;
+          user_id: string;
+          role: 'owner' | 'admin' | 'editor' | 'viewer';
+          invited_by?: string | null;
+          invited_at?: string;
+          accepted_at?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          page_id?: string;
+          user_id?: string;
+          role?: 'owner' | 'admin' | 'editor' | 'viewer';
+          invited_by?: string | null;
+          invited_at?: string;
+          accepted_at?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      page_invitations: {
+        Row: {
+          id: string;
+          page_id: string;
+          email: string;
+          role: 'admin' | 'editor' | 'viewer';
+          invited_by: string;
+          token: string;
+          expires_at: string;
+          accepted: boolean;
+          accepted_by: string | null;
+          accepted_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          page_id: string;
+          email: string;
+          role: 'admin' | 'editor' | 'viewer';
+          invited_by: string;
+          token: string;
+          expires_at: string;
+          accepted?: boolean;
+          accepted_by?: string | null;
+          accepted_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          page_id?: string;
+          email?: string;
+          role?: 'admin' | 'editor' | 'viewer';
+          invited_by?: string;
+          token?: string;
+          expires_at?: string;
+          accepted?: boolean;
+          accepted_by?: string | null;
+          accepted_at?: string | null;
+          created_at?: string;
+        };
+      };
+      team_member_limits: {
+        Row: {
+          page_id: string;
+          max_members: number;
+          current_members: number;
+          last_updated: string;
+        };
+        Insert: {
+          page_id: string;
+          max_members?: number;
+          current_members?: number;
+          last_updated?: string;
+        };
+        Update: {
+          page_id?: string;
+          max_members?: number;
+          current_members?: number;
+          last_updated?: string;
+        };
+      };
     };
   };
 }

@@ -27,3 +27,6 @@ CREATE INDEX IF NOT EXISTS idx_user_smtp_settings_user_id ON user_smtp_settings(
 CREATE INDEX IF NOT EXISTS idx_user_smtp_settings_provider ON user_smtp_settings(provider);
 CREATE INDEX IF NOT EXISTS idx_user_smtp_settings_is_active ON user_smtp_settings(is_active);
 
+
+
+

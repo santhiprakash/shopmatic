@@ -188,4 +188,33 @@ npm run build
 
 ---
 
+## 🔧 AI Dev Container
+
+This project includes a `.devcontainer/` setup for isolated AI-powered development using DevPod.
+
+```bash
+# First time: copy .env and add your API keys
+cp .devcontainer/.env.example .devcontainer/.env
+
+# Launch container (local Docker)
+devpod up . --ide none
+
+# Launch container (remote SSH server)
+devpod up . --provider ssh --ide none
+
+# Connect and start coding
+devpod ssh ecomjunction
+opencode    # or: kilo
+```
+
+Inside the container you get:
+- **Opencode CLI + Kilo Code CLI** with Claude Opus 4.6, Kimi K2.5, DeepSeek models
+- **BMAD-METHOD** — type `/bmad-help` for agile workflow guidance
+- **MCP servers** — chrome-devtools, context7, sequential-thinking, playwright
+- All project dependencies auto-installed
+
+See the [devcontainer-template README](https://github.com/user/devcontainer-template-public) for full setup instructions including Docker and DevPod installation.
+
+---
+
 Made with ❤️ by the eComJunction team

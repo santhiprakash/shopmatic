@@ -9,6 +9,7 @@ export interface User {
   name: string;
   firstName?: string;
   lastName?: string;
+  bio?: string;
   avatar?: string;
   plan: 'free' | 'pro' | 'enterprise';
   role: UserRole;
@@ -154,6 +155,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         : apiUser.firstName || apiUser.email.split('@')[0],
       firstName: apiUser.firstName,
       lastName: apiUser.lastName,
+      bio: apiUser.bio,
       avatar: apiUser.avatarUrl,
       plan: apiUser.subscriptionPlan || 'free',
       role: apiUser.role || 'affiliate_marketer',
@@ -343,6 +345,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         apiUpdates.firstName = nameParts[0];
         apiUpdates.lastName = nameParts.slice(1).join(' ');
       }
+      if (updates.bio) apiUpdates.bio = updates.bio;
       if (updates.avatar) apiUpdates.avatarUrl = updates.avatar;
 
       const response = await fetch(`${API_BASE_URL}/api/users/${authState.user.id}`, {

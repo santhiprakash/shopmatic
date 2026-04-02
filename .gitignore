@@ -17,6 +17,11 @@ dist-ssr
 .env.local
 .env.production
 .env.development
+.devcontainer/.env
+
+# For PUBLIC repos: uncomment these to exclude AI CLI configs with API endpoints
+# .devcontainer/opencode/
+# .devcontainer/kilo/
 
 # Editor directories and files
 .vscode/*

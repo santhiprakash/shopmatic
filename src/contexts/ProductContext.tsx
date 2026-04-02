@@ -145,7 +145,7 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
     }
     
     const newProduct: Product = {
-      ...validation.data,
+      ...(validation.data as Product),
       id: uuidv4(),
       rating: 0,
       createdAt: new Date(),
@@ -169,7 +169,7 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
     }
     
     setProducts(products.map(p => 
-      p.id === id ? { ...p, ...validation.data } : p
+      p.id === id ? { ...p, ...(validation.data as Partial<Product>) } : p
     ));
     toast.success('Product updated successfully!');
   };

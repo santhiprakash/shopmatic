@@ -62,7 +62,7 @@ export default function AddProductForm() {
   const [showApiSetup, setShowApiSetup] = useState(false);
 
   useEffect(() => {
-    setHasApiKey(APIKeyManager.hasValidKey('openai'));
+    APIKeyManager.hasValidKey('openai').then(setHasApiKey);
   }, []);
 
   // Check if user can add more products
