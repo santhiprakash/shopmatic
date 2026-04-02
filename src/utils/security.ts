@@ -177,15 +177,27 @@ interface CSPViolation {
 
 export class CSPReporter {
   private static violations: CSPViolation[] = [];
+  private static violationHandler: ((event: SecurityPolicyViolationEvent) => void) | null = null;
 
   /**
    * Initialize CSP violation reporting
    */
   static initialize(): void {
-    // Listen for CSP violations
-    document.addEventListener('securitypolicyviolation', (event) => {
+    if (this.violationHandler) return;
+    this.violationHandler = (event: SecurityPolicyViolationEvent) => {
       this.handleViolation(event);
-    });
+    };
+    document.addEventListener('securitypolicyviolation', this.violationHandler);
+  }
+
+  /**
+   * Cleanup CSP violation listener
+   */
+  static cleanup(): void {
+    if (this.violationHandler) {
+      document.removeEventListener('securitypolicyviolation', this.violationHandler);
+      this.violationHandler = null;
+    }
   }
 
   /**

@@ -22,7 +22,8 @@ export default function ProductFilters() {
     tags,
     filterOptions,
     setFilterOptions,
-    filteredProducts
+    filteredProducts,
+    products
   } = useProducts();
   
   const [tempFilters, setTempFilters] = useState(filterOptions);
@@ -89,7 +90,9 @@ export default function ProductFilters() {
     handleTagChange(value, false);
   };
   
-  const maxPrice = Math.max(...tags.map(tag => 10000));
+  const maxPrice = products.length > 0
+    ? Math.max(...products.map(p => p.price), 10000)
+    : 10000;
   
   // Simplified filters without duplicate categories
   return (

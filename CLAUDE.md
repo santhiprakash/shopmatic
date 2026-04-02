@@ -326,3 +326,37 @@ The platform supports team collaboration at the page level. Page owners can invi
 - Cannot invite as owner (owner is creator only)
 - Cannot change owner role
 - Activity logging for audit trails
+
+## Production Deployment Requirements
+
+### Required Environment Variables
+
+**Backend (`server/.env`)**:
+```env
+JWT_SECRET=<strong-random-string>    # REQUIRED - no fallback in production
+DATABASE_SSL=true                   # Enable SSL verification
+NODE_ENV=production
+PORT=3001
+```
+
+**Frontend (`.env`)**:
+```env
+VITE_OPENAI_API_KEY=<key>           # Required for AI extraction
+VITE_APP_URL=https://your-domain.com
+```
+
+### Recent Security Fixes (v1.1.0)
+- Provider nesting corrected in App.tsx
+- JWT_SECRET required in production (server fails without it)
+- Database SSL verification enforced in production
+- CSP unsafe-eval removed from security headers
+- ErrorBoundary now supports "Try Again" recovery
+- CSPReporter event listener properly cleaned up
+- Tests enabled in CI pipeline
+
+### Known Limitations for Production
+- CSRF token validation is placeholder-only (needs proper implementation)
+- API key encryption key stored in localStorage (consider server-side key storage)
+- No refresh token mechanism (relies on JWT with 7-day expiry)
+- No structured logging (using console.log/error)
+- No error tracking service (Sentry not integrated)

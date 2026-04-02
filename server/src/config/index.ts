@@ -10,7 +10,16 @@ export const config = {
   },
   
   jwt: {
-    secret: process.env.JWT_SECRET || 'fallback-secret-change-in-production',
+    secret: (() => {
+      if (!process.env.JWT_SECRET) {
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error('JWT_SECRET environment variable is required in production');
+        }
+        console.warn('WARNING: Using fallback JWT secret. Set JWT_SECRET in production!');
+        return 'fallback-secret-do-not-use-in-production';
+      }
+      return process.env.JWT_SECRET;
+    })(),
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
   

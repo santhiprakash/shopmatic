@@ -1,4 +1,4 @@
-
+import { useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ThemeCustomizer from "@/components/theme/ThemeCustomizer";
@@ -29,15 +29,15 @@ export default function Dashboard() {
   // Check if user is new (has less than 3 products)
   const isNewUser = products.length < 3;
 
-  const categoryCounts = categories.map((category) => ({
+  const categoryCounts = useMemo(() => categories.map((category) => ({
     name: category,
     count: products.filter((p) => p.categories.includes(category)).length,
-  }));
+  })), [categories, products]);
 
-  const tagCounts = tags.map((tag) => ({
+  const tagCounts = useMemo(() => tags.map((tag) => ({
     name: tag,
     count: products.filter((p) => p.tags.includes(tag)).length,
-  }));
+  })), [tags, products]);
 
   const COLORS = [
     "#3B82F6", // blue-500
@@ -52,15 +52,16 @@ export default function Dashboard() {
     "#6B7280", // gray-500
   ];
 
-  const currencyCounts = products.reduce((acc, product) => {
-    acc[product.currency] = (acc[product.currency] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const currencyData = Object.entries(currencyCounts).map(([currency, count]) => ({
-    name: currency,
-    value: count,
-  }));
+  const currencyData = useMemo(() => {
+    const currencyCounts = products.reduce((acc, product) => {
+      acc[product.currency] = (acc[product.currency] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    return Object.entries(currencyCounts).map(([currency, count]) => ({
+      name: currency,
+      value: count,
+    }));
+  }, [products]);
 
   const monthlyData = [
     { name: "Jan", products: 4 },

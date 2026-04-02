@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect, useMemo } from "react";
 import { Product, FilterOptions, ViewMode, SortOption, ProductFormData } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { InputSanitizer } from "@/utils/validation";
@@ -54,8 +54,14 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
   }, [products]);
 
   // Get all unique categories and tags from products
-  const productCategories = Array.from(new Set(products.flatMap(p => p.categories)));
-  const productTags = Array.from(new Set(products.flatMap(p => p.tags)));
+  const productCategories = useMemo(
+    () => Array.from(new Set(products.flatMap(p => p.categories))),
+    [products]
+  );
+  const productTags = useMemo(
+    () => Array.from(new Set(products.flatMap(p => p.tags))),
+    [products]
+  );
   
   // Store custom categories separately (in real app, this would be in database)
   const [customCategories, setCustomCategories] = useState<string[]>(() => {
@@ -87,53 +93,55 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
   };
 
   // Apply filters and sorting to products
-  const filteredProducts = products
-    .filter(product => {
-      // Search query
-      if (searchQuery && !product.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
-          !product.description.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
-      }
-      
-      // Categories
-      if (filterOptions.categories.length > 0 && 
-          !product.categories.some(cat => filterOptions.categories.includes(cat))) {
-        return false;
-      }
-      
-      // Tags
-      if (filterOptions.tags.length > 0 && 
-          !product.tags.some(tag => filterOptions.tags.includes(tag))) {
-        return false;
-      }
-      
-      // Price range
-      if (product.price < filterOptions.priceRange[0] || 
-          product.price > filterOptions.priceRange[1]) {
-        return false;
-      }
-      
-      // Rating
-      if (product.rating < filterOptions.rating) {
-        return false;
-      }
-      
-      return true;
-    })
-    .sort((a, b) => {
-      switch (sortOption) {
-        case "newest":
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case "price-low-high":
-          return a.price - b.price;
-        case "price-high-low":
-          return b.price - a.price;
-        case "rating":
-          return b.rating - a.rating;
-        default:
-          return 0;
-      }
-    });
+  const filteredProducts = useMemo(() => {
+    return products
+      .filter(product => {
+        // Search query
+        if (searchQuery && !product.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
+            !product.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+          return false;
+        }
+        
+        // Categories
+        if (filterOptions.categories.length > 0 && 
+            !product.categories.some(cat => filterOptions.categories.includes(cat))) {
+          return false;
+        }
+        
+        // Tags
+        if (filterOptions.tags.length > 0 && 
+            !product.tags.some(tag => filterOptions.tags.includes(tag))) {
+          return false;
+        }
+        
+        // Price range
+        if (product.price < filterOptions.priceRange[0] || 
+            product.price > filterOptions.priceRange[1]) {
+          return false;
+        }
+        
+        // Rating
+        if (product.rating < filterOptions.rating) {
+          return false;
+        }
+        
+        return true;
+      })
+      .sort((a, b) => {
+        switch (sortOption) {
+          case "newest":
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          case "price-low-high":
+            return a.price - b.price;
+          case "price-high-low":
+            return b.price - a.price;
+          case "rating":
+            return b.rating - a.rating;
+          default:
+            return 0;
+        }
+      });
+  }, [products, searchQuery, filterOptions, sortOption]);
 
   const addProduct = (productData: ProductFormData) => {
     // Validate and sanitize product data

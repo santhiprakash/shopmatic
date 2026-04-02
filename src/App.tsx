@@ -97,16 +97,16 @@ const App = () => (
                 <Route path="/features" element={<Features />} />
                 <Route path="/about-us" element={<About />} />
                 <Route path="/help-center" element={<Help />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <CookieConsent />
-            </BrowserRouter>
-          </TooltipProvider>
-        </ProductProvider>
-      </PageProvider>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                <CookieConsent />
+              </BrowserRouter>
+            </TooltipProvider>
+          </ProductProvider>
+        </PageProvider>
       </AuthProvider>
-    </ThemeProvider>
-      </AccessibilityProvider>
+      </ThemeProvider>
+    </AccessibilityProvider>
   </QueryClientProvider>
   </ErrorBoundary>
 );
