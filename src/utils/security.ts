@@ -1,4 +1,5 @@
 // Security utilities for CSP and other security measures
+import DOMPurify from 'dompurify';
 
 export class SecurityUtils {
   private static nonce: string | null = null;
@@ -64,13 +65,39 @@ export class SecurityUtils {
   }
 
   /**
-   * Sanitize HTML to prevent XSS
+   * Sanitize HTML to prevent XSS using DOMPurify
    */
   static sanitizeHtml(html: string): string {
-    // Create a temporary DOM element
-    const temp = document.createElement('div');
-    temp.textContent = html;
-    return temp.innerHTML;
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'br', 'p', 'ul', 'ol', 'li'],
+      ALLOWED_ATTR: ['href', 'target', 'rel'],
+      ADD_ATTR: ['target'],
+      FORCE_BODY: false,
+      RETURN_DOM: false,
+      RETURN_DOM_FRAGMENT: false,
+    });
+  }
+
+  /**
+   * Sanitize HTML for product descriptions (allows more formatting)
+   */
+  static sanitizeProductDescription(description: string): string {
+    return DOMPurify.sanitize(description, {
+      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'br', 'p', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      ALLOWED_ATTR: ['href', 'target', 'rel'],
+      ADD_ATTR: ['target'],
+      ALLOW_DATA_ATTR: false,
+    });
+  }
+
+  /**
+   * Sanitize URL for use in href/src
+   */
+  static sanitizeUrl(url: string): string {
+    if (!this.validateUrl(url)) {
+      return '#';
+    }
+    return DOMPurify.sanitize(url, { RETURN_TRUSTED_TYPE: false });
   }
 
   /**
@@ -81,18 +108,13 @@ export class SecurityUtils {
     
     for (const [key, value] of Object.entries(data)) {
       if (typeof value === 'string') {
-        // Remove potential XSS vectors
-        sanitized[key] = value
-          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-          .replace(/javascript:/gi, '')
-          .replace(/on\w+\s*=/gi, '')
-          .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-          .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-          .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
-          .trim();
+        sanitized[key] = DOMPurify.sanitize(value, {
+          ALLOWED_TAGS: [],
+          ALLOWED_ATTR: [],
+        }).trim();
       } else if (Array.isArray(value)) {
         sanitized[key] = value.map(item => 
-          typeof item === 'string' ? this.sanitizeHtml(item) : item
+          typeof item === 'string' ? DOMPurify.sanitize(item, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }) : item
         );
       } else {
         sanitized[key] = value;
@@ -134,11 +156,19 @@ export class SecurityUtils {
   }
 
   /**
-   * Validate CSRF token (placeholder for future implementation)
+   * Validate CSRF token format (actual validation done server-side)
    */
   static validateCSRFToken(token: string): boolean {
-    // This would be implemented when we have server-side validation
-    return token.length > 0;
+    // Basic format validation - token should be base64 encoded JSON
+    if (!token || token.length < 10) return false;
+    
+    try {
+      const decoded = atob(token);
+      const data = JSON.parse(decoded);
+      return !!(data.token && data.userId && data.expiresAt);
+    } catch {
+      return false;
+    }
   }
 
   /**
