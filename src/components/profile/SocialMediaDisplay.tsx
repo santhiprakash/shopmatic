@@ -9,6 +9,7 @@ import {
   ExternalLink,
   Check
 } from 'lucide-react';
+import { SecurityUtils } from '@/utils/security';
 
 interface SocialMediaHandle {
   platform: string;
@@ -48,7 +49,7 @@ const SOCIAL_PLATFORMS = [
   {
     id: 'tiktok',
     name: 'TikTok',
-    icon: Instagram, // Using Instagram icon as placeholder
+    icon: Instagram,
     color: 'bg-black',
     hoverColor: 'hover:bg-gray-800'
   },
@@ -60,6 +61,13 @@ const SOCIAL_PLATFORMS = [
     hoverColor: 'hover:bg-blue-700'
   }
 ];
+
+function getSafeUrl(url: string): string {
+  if (SecurityUtils.validateUrl(url)) {
+    return url;
+  }
+  return '#';
+}
 
 export default function SocialMediaDisplay({ 
   socialLinks, 
@@ -79,14 +87,17 @@ export default function SocialMediaDisplay({
         if (!platform) return null;
 
         const Icon = platform.icon;
+        const safeUrl = getSafeUrl(handle.url);
+        
         return (
           <a
             key={handle.platform}
-            href={handle.url}
+            href={safeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={`p-2 rounded-full ${platform.color} ${platform.hoverColor} text-white transition-all duration-200 hover:scale-110 shadow-md hover:shadow-lg`}
             title={`${platform.name}: @${handle.username}`}
+            onClick={safeUrl === '#' ? (e) => e.preventDefault() : undefined}
           >
             <Icon className="h-4 w-4" />
           </a>
@@ -102,13 +113,16 @@ export default function SocialMediaDisplay({
         if (!platform) return null;
 
         const Icon = platform.icon;
+        const safeUrl = getSafeUrl(handle.url);
+        
         return (
           <a
             key={handle.platform}
-            href={handle.url}
+            href={safeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="group"
+            onClick={safeUrl === '#' ? (e) => e.preventDefault() : undefined}
           >
             <Button
               variant="outline"
@@ -136,13 +150,16 @@ export default function SocialMediaDisplay({
           if (!platform) return null;
 
           const Icon = platform.icon;
+          const safeUrl = getSafeUrl(handle.url);
+          
           return (
             <a
               key={handle.platform}
-              href={handle.url}
+              href={safeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group"
+              onClick={safeUrl === '#' ? (e) => e.preventDefault() : undefined}
             >
               <div className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 transition-all duration-200 hover:shadow-md bg-card">
                 <div className={`p-2 rounded-lg ${platform.color} text-white group-hover:scale-110 transition-transform duration-200`}>
@@ -181,7 +198,6 @@ export default function SocialMediaDisplay({
   }
 }
 
-// Helper component for quick social media links in headers/footers
 export function SocialMediaQuickLinks({ socialLinks }: { socialLinks: Record<string, SocialMediaHandle> }) {
   return (
     <div className="flex items-center gap-1">
@@ -194,7 +210,6 @@ export function SocialMediaQuickLinks({ socialLinks }: { socialLinks: Record<str
   );
 }
 
-// Helper component for profile cards
 export function SocialMediaProfileCard({ socialLinks }: { socialLinks: Record<string, SocialMediaHandle> }) {
   const connectedHandles = Object.values(socialLinks || {});
   

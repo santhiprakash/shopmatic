@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import rateLimit from 'express-rate-limit';
 import { v4 as uuidv4 } from 'uuid';
 import { query } from '../config/database.js';
 import { config } from '../config/index.js';
@@ -9,6 +10,30 @@ import { validate } from '../middleware/validate.js';
 import { z } from 'zod';
 
 const router = Router();
+
+const authRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // 10 attempts per 15 minutes
+  message: { error: 'Too many authentication attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const registrationRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5, // 5 registrations per hour per IP
+  message: { error: 'Too many registration attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const forgotPasswordRateLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3, // 3 forgot password requests per hour per IP
+  message: { error: 'Too many password reset attempts, please try again later' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -22,7 +47,7 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-router.post('/register', validate(registerSchema), async (req, res) => {
+router.post('/register', registrationRateLimiter, validate(registerSchema), async (req, res) => {
   try {
     const { email, password, firstName, lastName } = req.body;
     
@@ -90,7 +115,7 @@ router.post('/register', validate(registerSchema), async (req, res) => {
   }
 });
 
-router.post('/login', validate(loginSchema), async (req, res) => {
+router.post('/login', authRateLimiter, validate(loginSchema), async (req, res) => {
   try {
     const { email, password } = req.body;
     
@@ -229,7 +254,7 @@ router.post('/verify-email', async (req, res) => {
   }
 });
 
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password', forgotPasswordRateLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     
@@ -259,7 +284,7 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
-router.post('/reset-password', async (req, res) => {
+router.post('/reset-password', forgotPasswordRateLimiter, async (req, res) => {
   try {
     const { token, password } = req.body;
     

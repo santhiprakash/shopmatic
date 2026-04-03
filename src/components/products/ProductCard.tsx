@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
 import { ExternalLink, Star } from "lucide-react";
 import { getTagColors, getCategoryBadgeColor } from "@/utils/categoryColors";
+import { SecurityUtils } from "@/utils/security";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onRemove }: ProductCardProps) {
+  const isValidLink = SecurityUtils.validateUrl(product.link);
+  const safeLink = isValidLink ? product.link : "#invalid-link";
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md group">
       <div className="relative overflow-hidden">
@@ -20,6 +24,9 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           src={product.image} 
           alt={product.title}
           className="h-52 w-full object-cover transition-transform group-hover:scale-105"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/placeholder-product.png";
+          }}
         />
         <Badge className="absolute right-3 top-3 bg-white/90 dark:bg-gray-800/90 text-primary shadow-sm backdrop-blur-sm">
           {product.source}
@@ -27,7 +34,13 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
         
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
           <Button asChild className="w-full bg-white/90 text-gray-900 hover:bg-white">
-            <a href={product.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1">
+            <a 
+              href={safeLink} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center justify-center gap-1"
+              onClick={isValidLink ? undefined : (e) => e.preventDefault()}
+            >
               View Product
               <ExternalLink className="h-3 w-3 ml-1" />
             </a>
@@ -87,7 +100,13 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           variant="outline" 
           className="flex-1 hidden group-hover:flex"
         >
-          <a href={product.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+          <a 
+            href={safeLink} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex items-center gap-1"
+            onClick={isValidLink ? undefined : (e) => e.preventDefault()}
+          >
             View Product
             <ExternalLink className="h-3 w-3 ml-1" />
           </a>

@@ -17,6 +17,7 @@ This document outlines the phased implementation plan for addressing the correct
 | Phase | Name | Priority | Status | Tasks | Completed |
 |-------|------|----------|--------|-------|-----------|
 | 1 | Critical Fixes | HIGH | 🔄 In Progress | 10 | 0/10 |
+| 1S | Security Fixes | HIGH | 🔄 In Progress | 5 | 2/5 |
 | 2 | UX Improvements | MEDIUM | ⏳ Pending | 7 | 0/7 |
 | 3 | Accessibility | MEDIUM | ⏳ Pending | 5 | 0/5 |
 | 4 | Polish & Performance | LOW | ⏳ Pending | 4 | 0/4 |
@@ -357,6 +358,126 @@ NOT ALLOWED:
 2. Add product with profanity in title → warning shown
 3. Click "Report" on product → report submitted
 4. Find content guidelines in footer → readable
+```
+
+---
+
+## Phase 1S: Security Fixes 🔄
+
+**Priority:** HIGH  
+**Target:** Immediate  
+**Goal:** Fix critical security vulnerabilities
+
+### Task 1S.1: XSS in Product Links ✅ FIXED
+
+**Fixed:** 2026-04-03  
+**File:** `src/components/products/ProductCard.tsx`
+
+**Issue:** Product links rendered without URL validation, allowing XSS via `javascript:` URLs.
+
+**Fix:** Added `SecurityUtils.validateUrl()` check before rendering links. Invalid URLs replaced with `#`.
+
+---
+
+### Task 1S.2: XSS in Social Media URLs ✅ FIXED
+
+**Fixed:** 2026-04-03  
+**File:** `src/components/profile/SocialMediaDisplay.tsx`
+
+**Issue:** Social media URLs rendered without validation, allowing XSS via `javascript:` URLs.
+
+**Fix:** Added `getSafeUrl()` helper using `SecurityUtils.validateUrl()`. Invalid URLs replaced with `#`.
+
+---
+
+### Task 1S.3: Auth Rate Limiting ✅ FIXED
+
+**Fixed:** 2026-04-03  
+**File:** `server/src/routes/auth.ts`
+
+**Issue:** No rate limiting on login, register, forgot-password endpoints.
+
+**Fix:** Added three rate limiters:
+- `authRateLimiter`: 10 login attempts per 15 minutes
+- `registrationRateLimiter`: 5 registrations per hour
+- `forgotPasswordRateLimiter`: 3 reset requests per hour
+
+---
+
+### Task 1S.4: CSRF Token Implementation
+
+**Priority:** HIGH  
+**Files:** `src/utils/security.ts`, `server/src/middleware/csrf.ts` (create)
+
+**Tasks:**
+- [ ] Create CSRF token generation utility
+- [ ] Create CSRF validation middleware for backend
+- [ ] Add CSRF token to all state-changing forms
+- [ ] Validate CSRF token on all POST/PATCH/DELETE requests
+
+**Acceptance Criteria:**
+- [ ] CSRF tokens generated for each session
+- [ ] Tokens validated on all state-changing API calls
+- [ ] Invalid tokens rejected with 403 response
+- [ ] Tokens rotated on login/logout
+
+**Testing:**
+```
+1. Submit form without CSRF token → 403 error
+2. Submit form with invalid token → 403 error
+3. Submit form with valid token → success
+4. Login/logout → new token generated
+```
+
+---
+
+### Task 1S.5: IDOR Protection for Page Endpoints
+
+**Priority:** HIGH  
+**Files:** `server/src/routes/pages.ts`
+
+**Tasks:**
+- [ ] Add authorization check to GET /pages/:id
+- [ ] Add authorization check to GET /pages/slug/:slug
+- [ ] Add authorization check to GET /pages/:id/products
+- [ ] Verify user owns or collaborates on page before returning data
+
+**Acceptance Criteria:**
+- [ ] Users can only access their own pages
+- [ ] Collaborators can access pages they have access to
+- [ ] Attempting to access other users' pages returns 403
+- [ ] Public pages accessible but analytics hidden
+
+**Testing:**
+```
+1. Create page as user A → accessible by user A
+2. Login as user B → try to access user A's page → 403
+3. Add user B as collaborator → now accessible
+4. Public page accessible but analytics shows ownership
+```
+
+---
+
+### Task 1S.6: DOMPurify Integration
+
+**Priority:** MEDIUM  
+**Files:** `src/utils/security.ts`
+
+**Tasks:**
+- [ ] Install DOMPurify
+- [ ] Replace regex sanitization with DOMPurify
+- [ ] Apply DOMPurify to all HTML rendering
+
+**Acceptance Criteria:**
+- [ ] DOMPurify used for all HTML sanitization
+- [ ] XSS payloads neutralized
+- [ ] No regex-based sanitization for HTML
+
+**Testing:**
+```
+1. Try XSS payloads → sanitized/neutralized
+2. DOMPurify used for product descriptions
+3. DOMPurify used for social media bio
 ```
 
 ---
