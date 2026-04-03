@@ -105,7 +105,7 @@ const App = () => (
           </ProductProvider>
         </PageProvider>
       </AuthProvider>
-      </ThemeProvider>
+    </ThemeProvider>
     </AccessibilityProvider>
   </QueryClientProvider>
   </ErrorBoundary>
