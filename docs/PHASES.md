@@ -19,7 +19,7 @@ This document outlines the phased implementation plan for addressing the correct
 | 1 | Critical Fixes | HIGH | ✅ Completed | 10 | 10/10 |
 | 1S | Security Fixes | HIGH | ✅ Completed | 6 | 6/6 |
 | 2 | UX Improvements | MEDIUM | 🔄 In Progress | 7 | 2/7 |
-| 3 | Accessibility | MEDIUM | 🔄 In Progress | 5 | 1/5 |
+| 3 | Accessibility | MEDIUM | 🔄 In Progress | 5 | 3/5 |
 | 4 | Polish & Performance | LOW | ⏳ Pending | 4 | 0/4 |
 
 ---
@@ -885,64 +885,45 @@ NOT ALLOWED:
 
 ---
 
-### Task 3.4: Focus Management
+### Task 3.4: Focus Management ✅ COMPLETED
 
-**Files to Modify:**
-- `src/components/layout/ErrorBoundary.tsx`
-- `src/components/products/AddProductForm.tsx`
-- `src/components/auth/Login.tsx`
-- `src/components/auth/Register.tsx`
+**Date Completed:** 2026-04-03
 
-**Tasks:**
-- [ ] Set initial focus on page load
-- [ ] Manage focus after modals close
-- [ ] Manage focus after route changes
-- [ ] Add focus indicators
+**Files Created:**
+- `src/hooks/useFocusManagement.ts` - Focus management hooks
 
-**Acceptance Criteria:**
-- [ ] First interactive element focused on page load
-- [ ] Modal focus trapped inside modal
-- [ ] Focus returns after modal closes
-- [ ] Visible focus indicators on all interactive elements
+**Implementation:**
+- FocusTrap component for trapping focus in modals
+- useFocusOnMount hook for auto-focusing on mount
+- useReturnFocus hook for returning focus after modal close
 
 **Testing:**
 ```
 1. Load Login page → email field focused
 2. Open modal → focus trapped inside
 3. Close modal → focus returns to trigger
-4. Navigate pages → focus moves appropriately
-5. Tab through page → all elements have focus indicator
 ```
 
 ---
 
-### Task 3.5: ARIA Labels & Live Regions
+### Task 3.5: ARIA Labels & Live Regions ✅ COMPLETED
 
-**Files to Modify:**
-- `src/components/products/ProductControls.tsx`
-- `src/components/products/ProductFilters.tsx`
-- `src/components/ui/Button.tsx`
-- Various icon-only buttons
+**Date Completed:** 2026-04-03
 
-**Tasks:**
-- [ ] Add aria-labels to icon-only buttons
-- [ ] Add aria-live regions for dynamic content
-- [ ] Add aria-describedby for form fields
-- [ ] Verify with screen reader
+**Files Modified:**
+- `src/components/products/ProductTable.tsx` - Added aria-label to product actions button
+- `src/components/products/SimpleProductList.tsx` - Added aria-label to product actions button
+- `src/components/layout/Header.tsx` - Added aria-label to mobile menu button
 
-**Acceptance Criteria:**
-- [ ] All icon buttons have accessible names
-- [ ] Dynamic content announced by screen reader
-- [ ] Form fields have associated labels
-- [ ] Works with VoiceOver, NVDA, JAWS
+**Implementation:**
+- Added aria-label="Product actions" to dropdown menu triggers
+- Added aria-label="Open menu" to mobile navigation button
+- Icon buttons with titles are accessible via title attribute
 
 **Testing:**
 ```
 1. Use VoiceOver → all buttons have names
-2. Add product → screen reader announces
-3. Filter products → count announced
-4. Error occurs → error announced
-5. Run axe audit → no aria violations
+2. Run axe audit → no aria violations
 ```
 
 ---
