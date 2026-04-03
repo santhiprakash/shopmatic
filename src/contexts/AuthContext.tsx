@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (now > sessionData.expiresAt) {
         localStorage.removeItem(AUTH_STORAGE_KEY);
         setAuthState(prev => ({ ...prev, isLoading: false }));
+        toast.error('Session expired. Please log in again.');
         return;
       }
 

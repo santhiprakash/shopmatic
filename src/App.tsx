@@ -33,6 +33,8 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import PublicPage from "./pages/PublicPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +102,8 @@ const App = () => (
                 <Route path="/help-center" element={<Help />} />
                 <Route path="/@:username" element={<PublicPage />} />
                 <Route path="/@:username/:collectionSlug" element={<PublicPage />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <CookieConsent />

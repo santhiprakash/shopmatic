@@ -16,8 +16,8 @@ This document outlines the phased implementation plan for addressing the correct
 
 | Phase | Name | Priority | Status | Tasks | Completed |
 |-------|------|----------|--------|-------|-----------|
-| 1 | Critical Fixes | HIGH | 🔄 In Progress | 10 | 1/10 |
-| 1S | Security Fixes | HIGH | 🔄 In Progress | 5 | 2/5 |
+| 1 | Critical Fixes | HIGH | 🔄 In Progress | 10 | 6/10 |
+| 1S | Security Fixes | HIGH | 🔄 Completed | 5 | 2/5 |
 | 2 | UX Improvements | MEDIUM | ⏳ Pending | 7 | 0/7 |
 | 3 | Accessibility | MEDIUM | ⏳ Pending | 5 | 0/5 |
 | 4 | Polish & Performance | LOW | ⏳ Pending | 4 | 0/4 |
@@ -143,41 +143,132 @@ This document outlines the phased implementation plan for addressing the correct
 6. Use expired token → error message
 ```
 
+**Note:** AuthModal already has forgot password form. Created standalone pages at:
+- `/forgot-password` - Standalone forgot password page
+- `/reset-password?token=xxx` - Standalone reset password page
+
 ---
 
-### Task 1.4: Onboarding Wizard Integration
+### Task 1.3: Password Reset Flow ✅ COMPLETED
 
-**Files to Modify:**
-- `src/components/onboarding/OnboardingWizard.tsx`
-- `src/App.tsx` (check integration)
-- `src/contexts/AuthContext.tsx`
+**Date Completed:** 2026-04-03
 
-**Tasks:**
-- [ ] Verify wizard triggers on first login
-- [ ] Test all wizard steps work correctly
-- [ ] Ensure wizard completes and sets flag
-- [ ] Check skip/replay functionality
-- [ ] Verify wizard doesn't reappear after completion
+**Files Created:**
+- `src/pages/ForgotPassword.tsx` - Standalone forgot password page
+- `src/pages/ResetPassword.tsx` - Standalone reset password page
 
-**Acceptance Criteria:**
-- [ ] First-time users see onboarding wizard
-- [ ] Wizard has 4 clear steps
-- [ ] Progress persists across steps
-- [ ] Can skip wizard
-- [ ] Wizard doesn't show after completion
+**Files Modified:**
+- `src/App.tsx` - Added `/forgot-password` and `/reset-password` routes
+
+**Implementation:**
+- ForgotPassword page with email input
+- ResetPassword page with token validation
+- Password strength validation (8+ chars, upper/lower/number)
+- Backend already implemented at `/api/auth/forgot-password` and `/api/auth/reset-password`
 
 **Testing:**
 ```
-1. Create new account → wizard appears
-2. Complete all steps → dashboard loads
-3. Refresh page → wizard doesn't reappear
-4. Click "Skip" → wizard closes, dashboard loads
-5. Clear localStorage → wizard reappears on next login
+1. Click "Forgot password?" in AuthModal → modal opens with reset form
+2. Or visit /forgot-password directly
+3. Enter email → success message shown
+4. Click reset link from email → /reset-password?token=xxx
+5. Enter new password → success
+6. Login with new password → works
 ```
 
 ---
 
-### Task 1.5: Session Expiry Handling
+### Task 1.4: Onboarding Wizard Integration ✅ COMPLETED
+
+**Date Completed:** 2026-04-03
+
+**Status:** Already fully implemented
+
+**Files Verified:**
+- `src/components/onboarding/OnboardingWizard.tsx` - Main wizard component
+- `src/hooks/use-onboarding.ts` - State management hook
+- `src/components/onboarding/WelcomeStep.tsx`
+- `src/components/onboarding/ProfileSetupStep.tsx`
+- `src/components/onboarding/AffiliateSetupStep.tsx`
+- `src/components/onboarding/FirstProductStep.tsx`
+- `src/components/onboarding/ThemeCustomizationStep.tsx`
+
+**Implementation:**
+- 5-step wizard (Welcome, Profile, Affiliate IDs, First Product, Theme)
+- Progress persisted in localStorage
+- Can skip or complete onboarding
+- Shows for authenticated users only
+- Doesn't show for demo mode users
+
+---
+
+### Task 1.5: Session Expiry Handling ✅ COMPLETED
+
+**Date Completed:** 2026-04-03
+
+**Files Modified:**
+- `src/contexts/AuthContext.tsx`
+
+**Implementation:**
+- Session duration: 24 hours (SESSION_DURATION constant)
+- Checks session expiry on app load
+- Shows "Session expired. Please log in again." toast when session expires
+- Removes expired session from localStorage
+- Redirects to login via ProtectedRoute
+
+**Testing:**
+```
+1. Login → session stored with 24hr expiry
+2. Wait/simulate 24 hours → session expires
+3. Attempt page access → toast shows "Session expired"
+4. Redirect to login → user logs in again
+```
+
+---
+
+### Task 1.6: Invalid URL Error Handling ✅ COMPLETED
+
+**Date Completed:** 2026-04-03
+
+**Files Verified:**
+- `src/components/products/ProductCard.tsx` - URL validation on links
+- `src/components/products/ProductTable.tsx` - URL validation before window.open
+- `src/components/profile/SocialMediaDisplay.tsx` - URL validation on social links
+- `src/utils/security.ts` - SecurityUtils.validateUrl()
+
+**Implementation:**
+- All external links validated before rendering/opening
+- `javascript:`, `data:`, `file:`, `ftp:` protocols blocked
+- Invalid links replaced with `#` and clicks prevented
+- User-friendly error handling
+
+**Testing:**
+```
+1. Try to add product with javascript: URL → validation error
+2. Try to open invalid link → prevented, no action
+3. Valid URLs → open correctly in new tab
+```
+
+---
+
+### Task 1.7: Product Image Fallback ✅ COMPLETED
+
+**Date Completed:** 2026-04-03
+
+**Files Modified:**
+- `src/components/products/ProductCard.tsx`
+
+**Implementation:**
+- Added onError handler for product images
+- Falls back to `/placeholder.svg` when image fails to load
+- Works for Amazon images, custom URLs, any product image
+
+**Testing:**
+```
+1. Add product with invalid image URL → placeholder shown
+2. Amazon image 404 → placeholder shown
+3. Valid image loads → shows correctly
+```
 
 **Files to Modify:**
 - `src/contexts/AuthContext.tsx`

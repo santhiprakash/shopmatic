@@ -25,7 +25,7 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           alt={product.title}
           className="h-52 w-full object-cover transition-transform group-hover:scale-105"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = "/placeholder-product.png";
+            (e.target as HTMLImageElement).src = "/placeholder.svg";
           }}
         />
         <Badge className="absolute right-3 top-3 bg-white/90 dark:bg-gray-800/90 text-primary shadow-sm backdrop-blur-sm">
