@@ -32,6 +32,7 @@ import PrivacySettings from "./pages/PrivacySettings";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
+import PublicPage from "./pages/PublicPage";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,8 @@ const App = () => (
                 <Route path="/features" element={<Features />} />
                 <Route path="/about-us" element={<About />} />
                 <Route path="/help-center" element={<Help />} />
+                <Route path="/@:username" element={<PublicPage />} />
+                <Route path="/@:username/:collectionSlug" element={<PublicPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <CookieConsent />
