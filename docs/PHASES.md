@@ -16,8 +16,8 @@ This document outlines the phased implementation plan for addressing the correct
 
 | Phase | Name | Priority | Status | Tasks | Completed |
 |-------|------|----------|--------|-------|-----------|
-| 1 | Critical Fixes | HIGH | 🔄 In Progress | 8 | 0/8 |
-| 2 | UX Improvements | MEDIUM | ⏳ Pending | 6 | 0/6 |
+| 1 | Critical Fixes | HIGH | 🔄 In Progress | 10 | 0/10 |
+| 2 | UX Improvements | MEDIUM | ⏳ Pending | 7 | 0/7 |
 | 3 | Accessibility | MEDIUM | ⏳ Pending | 5 | 0/5 |
 | 4 | Polish & Performance | LOW | ⏳ Pending | 4 | 0/4 |
 
@@ -271,6 +271,96 @@ This document outlines the phased implementation plan for addressing the correct
 
 ---
 
+### Task 1.9: Sharer Attribution System
+
+**Files to Create:**
+- `src/utils/shareTracking.ts`
+- `src/components/share/ShareButtons.tsx`
+- `src/pages/SharedByMe.tsx`
+
+**Files to Modify:**
+- `src/components/products/ProductCard.tsx`
+- `src/components/products/CollectionCard.tsx`
+- `src/pages/CollectionPage.tsx`
+- `src/App.tsx`
+
+**Tasks:**
+- [ ] Create share URL generator with ref params
+- [ ] Implement ref param capture on page load
+- [ ] Store sharer attribution in backend
+- [ ] Create "Shared by Me" dashboard page
+- [ ] Display "Shared by @username" on collection pages
+- [ ] Track clicks per sharer
+
+**Acceptance Criteria:**
+- [ ] Share URLs include `?ref=username&src=whatsapp|twitter|etc`
+- [ ] Sharer can see their share links and click counts
+- [ ] Collection owner sees "Shared by @sarah (X clicks)" attribution
+- [ ] Works for both products and collections
+
+**Testing:**
+```
+1. Share collection → copy link with ref params
+2. Open shared link in incognito → click recorded with ref
+3. Check sharer dashboard → shows 1 click
+4. Check curator analytics → shows "Shared by [sharer]"
+5. Test WhatsApp, Twitter, copy link sources
+```
+
+---
+
+### Task 1.10: Content Guidelines Enforcement
+
+**Files to Create:**
+- `src/utils/contentModeration.ts`
+- `src/components/admin/ContentReview.tsx`
+
+**Files to Modify:**
+- `src/components/products/AddProductForm.tsx`
+- `src/services/ProductService.ts`
+- `server/src/routes/products.ts`
+- `docs/CONTENT_GUIDELINES.md`
+
+**Tasks:**
+- [ ] Create content guidelines document
+- [ ] Implement URL blocklist (known bad domains)
+- [ ] Add profanity filter on titles/descriptions
+- [ ] Create report button for users
+- [ ] Add admin review queue (future)
+
+**Content Guidelines:**
+```
+ALLOWED:
+- Physical products (electronics, fashion, home)
+- Digital products (courses, software, ebooks)
+- Subscriptions (SaaS, memberships)
+- Products from any platform (Amazon, Flipkart, AppSumo)
+
+NOT ALLOWED:
+- Illegal products or services
+- Counterfeit goods
+- Hate/violence promoting products
+- Adult content (without age verification)
+- Fraudulent/misleading products
+- Products violating source platform terms
+```
+
+**Acceptance Criteria:**
+- [ ] Blocklist domains rejected with clear message
+- [ ] Profanity in titles shows warning
+- [ ] Report button visible on products
+- [ ] Guidelines accessible from footer/registration
+
+**Testing:**
+```
+1. Add product from blocked domain → rejection message
+2. Add product with profanity in title → warning shown
+3. Click "Report" on product → report submitted
+4. Find content guidelines in footer → readable
+```
+
+---
+
 ## Phase 2: UX Improvements ⏳
 
 **Priority:** MEDIUM  
@@ -453,6 +543,36 @@ This document outlines the phased implementation plan for addressing the correct
 3. Click "Got it" → tooltip dismisses
 4. Refresh → tooltip doesn't reappear
 5. Click "Show tips" → tooltips reappear
+```
+
+---
+
+### Task 2.7: WhatsApp Direct Share
+
+**Files to Modify:**
+- `src/components/share/ShareButtons.tsx`
+- `src/components/products/ProductCard.tsx`
+- `src/components/products/CollectionCard.tsx`
+
+**Tasks:**
+- [ ] Add WhatsApp share button with wa.me link
+- [ ] Pre-fill message with product/collection name + URL
+- [ ] Include ref params in WhatsApp share URL
+- [ ] Track WhatsApp as source in analytics
+
+**Acceptance Criteria:**
+- [ ] WhatsApp button visible on products and collections
+- [ ] Clicking opens WhatsApp with pre-filled message
+- [ ] Share URL includes tracking params
+- [ ] WhatsApp clicks tracked separately
+
+**Testing:**
+```
+1. Click WhatsApp button → WhatsApp opens with message
+2. Message contains product name and URL
+3. URL includes ref params
+4. Check analytics → WhatsApp source recorded
+5. Send to friend → link works with attribution
 ```
 
 ---

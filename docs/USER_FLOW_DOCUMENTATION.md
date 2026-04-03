@@ -1,16 +1,58 @@
 # eComJunction User Flow Documentation
 
-**Document Version:** 1.0  
+**Document Version:** 2.0  
 **Last Updated:** 2026-04-03  
-**Status:** Draft - For Review
+**Status:** Draft - For Review  
+**Product Domain:** shopmatic.cc
 
 ---
 
 ## 1. Product Overview
 
-### 1.1 What is eComJunction?
+### 1.1 What is shopmatic.cc?
 
-eComJunction is a SAAS platform that helps **influencers and affiliate marketers** organize, showcase, and share product recommendations with their audience. It combines AI-powered product extraction with beautiful, customizable storefronts.
+shopmatic.cc is a SAAS platform that empowers **Curators** (influencers and affiliate marketers) to curate, showcase, and share product recommendations with their audience. Anyone can add any product from any online platform (Amazon, Flipkart, AppSumo, etc.) - physical products, subscriptions, or digital products - and share them via personalized collection pages.
+
+**Core Concept:**
+> "Add any product. Create collections. Share with your world. Track your impact."
+
+### 1.2 The Two User Types
+
+| Role | Description | Registration Required |
+|------|-------------|---------------------|
+| **Curator** | Adds products, creates collections, shares pages | ✅ Yes |
+| **Sharer** | Shares products/pages with network, contributes to spread | ✅ Yes |
+| **Buyer/Visitor** | Views products, clicks through to buy | ❌ No |
+
+**Note:** A Curator IS a Sharer - they can both create and share. A Sharer who discovers a page can register to share it further with their own network.
+
+### 1.3 Core Value Proposition
+
+| For Curators | For Sharers |
+|--------------|-------------|
+| AI-powered product extraction from any URL | Zero-friction sharing (no account needed to browse) |
+| Beautiful, customizable collection pages | Register once, share anything |
+| Track clicks, geography, and audience engagement | Earn recognition for spreading great products |
+| No product restrictions (except unethical/illegal) | Help friends discover products you love |
+| Free tier with generous limits | Built-in WhatsApp/social sharing |
+
+### 1.4 Product Guidelines
+
+**Allowed:**
+- Physical products (electronics, fashion, home goods)
+- Digital products (courses, software, ebooks)
+- Subscriptions (SaaS, memberships, boxes)
+- Products from any platform (Amazon, Flipkart, AppSumo, etc.)
+
+**NOT Allowed:**
+- Illegal products or services
+- Counterfeit goods
+- Products promoting hate or violence
+- Adult content (without age verification)
+- Misleading or fraudulent products
+- Products violating platform terms from source
+
+*Full guidelines in Terms of Service and separate Content Policy document.*
 
 ### 1.2 Core Value Proposition
 
@@ -22,19 +64,280 @@ eComJunction is a SAAS platform that helps **influencers and affiliate marketers
 | "I work with a team" | Collaboration features with role-based access |
 | "I need my page to look professional" | Customizable themes and branding |
 
-### 1.3 Target Users
+---
 
-1. **Affiliate Marketers** - Promote products and earn commissions
-2. **Influencers** - Curate product collections for followers
-3. **Content Creators** - Organize product reviews and recommendations
-4. **Niche Bloggers** - Create product comparison pages
+## 2. User Types Deep Dive
+
+### 2.1 Curator (Influencer/Affiliate Marketer)
+
+**Who they are:** Someone who finds and recommends products to their audience. Could be a tech reviewer, fashion blogger, deal hunter, or anyone with a network to share with.
+
+**What they do:**
+- Add products by pasting URLs (AI extracts details automatically)
+- Create collection pages around themes ("My Top 10 Tech Gadgets 2026")
+- Customize page appearance to match their brand
+- Share pages via social media, WhatsApp, blogs
+- Track analytics (clicks, geography, referrers)
+
+**Motivation:**
+- Save time curating products
+- Look professional with minimal effort
+- Understand what their audience engages with
+- Monetize their recommendations
+
+**Key Screens:**
+1. Dashboard (stats overview)
+2. My Products (product library)
+3. My Pages (collection pages)
+4. Analytics (performance metrics)
+5. Settings (profile, affiliate IDs, theme)
+
+### 2.2 Sharer (Contributor/Network Spreader)
+
+**Who they are:** An end user who discovers a collection page and wants to share it with their own network. They might be a friend helping friends discover great products.
+
+**What they do:**
+- Browse collection pages without registering
+- Click products to go directly to purchase
+- Register to unlock sharing features
+- Share individual products or entire collections
+- Create their own collections (optional)
+
+**Motivation:**
+- Share products they believe in
+- Help their network discover useful things
+- Get credit for being a trusted source
+
+**Key Screens:**
+1. Public Collection Page (browse without account)
+2. Product Detail Modal (view details, click to buy)
+3. Registration/Login (to enable sharing)
+4. Share Confirmation (track their impact)
+
+### 2.3 Buyer/Visitor (Anonymous)
+
+**Who they are:** Anyone who clicks on a shared link. No registration required.
+
+**What they do:**
+- View curated collection pages
+- Click products → goes directly to product page
+- Share pages/products directly (opens share dialog)
+- Optionally register to save preferences
+
+**Key Screens:**
+1. Public Collection Page
+2. Product Detail (inline, no modal)
+3. Direct link to product page
 
 ---
 
-## 2. User Journey
+## 3. User Journey
 
-### 2.1 Discovery & Signup Flow
+### 3.1 Curator Journey (Complete Flow)
 
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CURATOR COMPLETE JOURNEY                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 1: DISCOVERY                                                          │
+│  User finds shopmatic.cc via:                                                │
+│  ├── Google Search (productivity tools, page builders)                     │
+│  ├── Social Media (Twitter, LinkedIn, YouTube)                             │
+│  ├── Word of Mouth (referrals from other curators)                          │
+│  └── Content Marketing (SEO for "affiliate page builder")                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 2: SIGN UP (becoming a Curator)                                       │
+│                                                                             │
+│  LANDING PAGE (/)                                                            │
+│  ├── Hero: "Curate. Share. Track."                                         │
+│  ├── "Start Free" CTA                                                       │
+│  └── "See Examples" showing sample pages                                   │
+│                                                                             │
+│  SIGNUP (/register)                                                          │
+│  ├── Email + Password                                                       │
+│  ├── Username (for URL: shopmatic.cc/@username)                            │
+│  └── Agree to Terms + Content Guidelines                                    │
+│                                                                             │
+│  Demo Mode available: "Try without account" → loads sample data             │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 3: ONBOARDING (first-time curators)                                   │
+│                                                                             │
+│  ONBOARDING WIZARD                                                           │
+│  ├── Step 1: "What brings you here?"                                       │
+│  │       Options: Influencer, Blogger, Deal Hunter, Just Exploring         │
+│  │                                                                         │
+│  ├── Step 2: "Add your first product"                                     │
+│  │       Paste URL → AI extracts details                                   │
+│  │       Or "Skip, I'll do this later"                                     │
+│  │                                                                         │
+│  ├── Step 3: "Create your first collection"                                │
+│  │       Name your collection, add products                                 │
+│  │       Or "Skip, I'll do this later"                                     │
+│  │                                                                         │
+│  └── Step 4: "You're ready!"                                               │
+│          Preview dashboard                                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 4: DAILY CURATOR WORKFLOW                                            │
+│                                                                             │
+│  A) ADDING A PRODUCT                                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. Click "Add Product" button                                         │   │
+│  │ 2. Paste URL from ANY platform (Amazon, Flipkart, AppSumo, etc.)     │   │
+│  │ 3. AI extracts: title, price, description, images, rating             │   │
+│  │ 4. Review/edit extracted data                                         │   │
+│  │ 5. Add to collection (or keep as standalone)                         │   │
+│  │ 6. Set affiliate link (auto-append your IDs)                         │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  B) CREATING A COLLECTION                                                   │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ 1. Go to "My Pages" → "Create New"                                  │   │
+│  │ 2. Name your collection (e.g., "2026 Tech Favorites")              │   │
+│  │ 3. Add products from your library                                   │   │
+│  │ 4. Customize theme (colors, layout)                                  │   │
+│  │ 5. Add optional: bio, social links, custom header                    │   │
+│  │ 6. Preview → Publish                                                 │   │
+│  │ 7. Get shareable link: shopmatic.cc/@username/collection-slug        │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  C) ANALYTICS & TRACKING                                                    │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ Dashboard shows:                                                      │   │
+│  │ ├── Total page views                                                 │   │
+│  │ ├── Product clicks (by collection and product)                       │   │
+│  │ ├── Traffic sources (direct, social, search)                         │   │
+│  │ ├── Geography (countries/cities)                                     │   │
+│  │ └── Top performing products                                          │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 5: GROWTH (optional)                                                   │
+│                                                                             │
+│  Upgrade to Pro/Enterprise for:                                             │
+│  ├── Custom domain (yourname.com instead of shopmatic.cc/@you)            │
+│  ├── More collections and products                                         │
+│  ├── Team collaboration (add editors)                                     │
+│  ├── Advanced analytics                                                    │
+│  └── API access                                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3.2 Sharer Journey (Discovery to Sharing)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    SHARER COMPLETE JOURNEY                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 1: DISCOVERY (Receiving a Shared Link)                                │
+│                                                                             │
+│  User receives link via:                                                     │
+│  ├── WhatsApp message from friend                                          │
+│  ├── Social media post (Twitter, Instagram)                               │
+│  ├── Email from colleague                                                  │
+│  └── Blog post or newsletter                                               │
+│                                                                             │
+│  Example: "Check out this cool page: shopmatic.cc/@techguru/best-gadgets"   │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 2: BROWSING (No Registration Required)                                │
+│                                                                             │
+│  LANDING ON COLLECTION PAGE                                                  │
+│  ├── Hero: Curator's name and bio                                          │
+│  ├── Collection title and description                                      │
+│  ├── Product grid with images, prices, ratings                             │
+│  ├── Each product card shows:                                              │
+│  │     - Product image                                                     │
+│  │     - Title (truncated)                                                 │
+│  │     - Price                                                             │
+│  │     - Rating (if available)                                             │
+│  │     - "View Details" → expands inline                                   │
+│  │     - "Get This" → goes directly to product URL                         │
+│  └── Share buttons (WhatsApp, Twitter, Copy Link)                         │
+│                                                                             │
+│  Clicking "Get This":                                                       │
+│  ├── Opens product page in new tab                                        │
+│  ├── Tracked as a click (for curator analytics)                            │
+│  └── No registration needed                                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 3: ENGAGEMENT (Optional Registration)                                │
+│                                                                             │
+│  Registration offers:                                                        │
+│  ├── "Share this collection with YOUR name attached"                       │
+│  ├── "Create your own collections"                                         │
+│  ├── "Get credit when friends buy through your shares"                     │
+│  └── "Track your sharing impact"                                           │
+│                                                                             │
+│  REGISTER (/register?redirect=/share/...)                                  │
+│  ├── Email + Password                                                       │
+│  ├── Username (how you appear when sharing)                                │
+│  └── Quick: "Continue with Google" (future)                                 │
+│                                                                             │
+│  After registration:                                                        │
+│  ├── Can share ANY product/collection with their name                      │
+│  ├── See "Shared by you" section in dashboard                              │
+│  └── Track clicks on their shares                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  STAGE 4: SHARING (The Power Feature)                                       │
+│                                                                             │
+│  SHARE BUTTONS on every product and collection:                             │
+│  ├── WhatsApp (direct message)                                            │
+│  ├── Twitter/X                                                             │
+│  ├── Facebook                                                              │
+│  ├── LinkedIn                                                              │
+│  ├── Copy Link (with auto-generatedUTM tracking)                          │
+│  └── QR Code (for offline sharing)                                         │
+│                                                                             │
+│  When user shares:                                                          │
+│  ├── Link includes tracking (UTM params + user ID if registered)          │
+│  ├── Friends see "Shared by [Username]" badge                             │
+│  ├── Sharer gets credit in analytics                                       │
+│  └── Curator sees "Shared by @username" in their stats                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3.3 Buyer Journey (Just Want to Buy)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BUYER JOURNEY (Fastest Path)                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  1. Click shared link → Lands on collection page                           │
+│  2. Browse products (no registration)                                       │
+│  3. Find product they like                                                 │
+│  4. Click "Get This" → Goes directly to Amazon/Flipkart/etc.               │
+│  5. Completes purchase on external site                                     │
+│                                                                             │
+│  That. Is. It.                                                              │
+│                                                                             │
+│  Optional (if they want to share themselves):                              │
+│  6. Click "Share" → Prompted to register or continue anonymously          │
+│  7. Register → Can now share with their name                              │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                          NEW USER DISCOVERY                                 │
@@ -279,9 +582,11 @@ START: Page owner wants to invite team members
 
 ---
 
-## 3. Page Structure & Navigation
+---
 
-### 3.1 Public Pages (No Login Required)
+## 4. Page Structure & Navigation
+
+### 4.1 Public Pages (No Login Required)
 
 | Route | Page | Purpose |
 |-------|------|---------|
@@ -290,91 +595,227 @@ START: Page owner wants to invite team members
 | `/pricing` | Pricing | Plan comparison |
 | `/about-us` | About | Company info |
 | `/help-center` | Help | FAQs and support |
-| `/p/:slug` | Public Page | User's storefront (shareable) |
+| `/@:username` | Curator Profile | Shows all collections by this curator |
+| `/@:username/:collectionSlug` | Collection Page | Public shareable collection |
+| `/p/:productId` | Product Detail | Standalone product (optional) |
 
-### 3.2 Authenticated Pages (Login Required)
+### 4.2 Authenticated Pages (Login Required)
 
 | Route | Page | Purpose |
 |-------|------|---------|
 | `/dashboard` | Dashboard | Overview and stats |
 | `/my-products` | My Products | Product catalog management |
+| `/my-pages` | My Pages | Collection pages management |
 | `/analytics` | Analytics | Performance tracking |
+| `/shared` | Shared by Me | Track shares and impact |
 | `/settings` | Settings | Account, SMTP, preferences |
-| `/profile` | Profile | User profile management |
+| `/profile` | Profile | User profile, username, bio |
+| `/affiliate-ids` | Affiliate IDs | Configure affiliate tracking |
 | `/privacy-settings` | Privacy | Data export/delete, cookies |
 
-### 3.3 Compliance Pages
+### 4.3 Compliance Pages
 
 | Route | Page | Purpose |
 |-------|------|---------|
 | `/privacy-policy` | Privacy Policy | Legal |
 | `/terms-of-service` | Terms | Legal |
+| `/content-guidelines` | Content Guidelines | What can/cannot be shared |
 | `/cookies` | Cookie Policy | GDPR compliance |
+
+### 4.4 URL Structure
+
+```
+shopmatic.cc
+├── /                              # Landing page
+├── /@johndoe                      # John's public profile (all collections)
+├── /@johndoe/tech-favorites       # John's "Tech Favorites" collection
+├── /@johndoe/best-books-2026      # John's "Best Books 2026" collection
+├── /dashboard                     # (Authenticated) John's dashboard
+├── /my-products                   # (Authenticated) John's products
+├── /my-pages                      # (Authenticated) John's collections
+└── /settings                      # (Authenticated) John's settings
+```
+
+**Sharer URL Structure:**
+```
+When Sarah shares John's collection:
+shopmatic.cc/@johndoe/tech-favorites?ref=sarah
+
+When Sarah shares a product:
+shopmatic.cc/product/abc123?ref=sarah
+```
 
 ---
 
-## 4. Feature walkthrough
+---
 
-### 4.1 Product Management
+## 5. Core Features
 
-#### Adding Products
-1. **Manual Entry**: Click "Add Product" → Fill form (title, price, description, images, category, tags)
-2. **AI Extraction**: Paste URL → AI extracts data automatically
-3. **Import**: Bulk import via CSV (future feature)
+### 5.1 Product Management
+
+#### Adding Products (AI-Powered)
+```
+1. Click "Add Product"
+2. Paste URL from ANY platform:
+   - Amazon, Flipkart, eBay
+   - AppSumo, ProductHunt
+   - Direct product pages (any site)
+3. AI extracts:
+   ├── Title
+   ├── Description
+   ├── Price + Currency
+   ├── Product Images
+   ├── Rating
+   └── Specifications
+4. Review & Edit
+5. Set Affiliate URL (auto-generates with your IDs)
+6. Add to collection or keep standalone
+```
 
 #### Organizing Products
-- **Categories**: Group products by type (e.g., "Electronics", "Fashion")
-- **Tags**: Add custom tags for filtering
+- **Collections**: Group products into shareable pages
+- **Tags**: Add custom tags for filtering within your library
 - **Sorting**: Newest, Price (low-high, high-low), Rating
 - **View Modes**: Grid (visual) or List (compact)
 
-#### Filtering Products
-- By category
-- By tag
-- By price range (slider)
-- By minimum rating
-- Combined filters with "Clear All"
+### 5.2 Collection Pages
 
-### 4.2 Theme Customization
+**What is a Collection?**
+A curated list of products around a theme. Examples:
+- "My Top 10 Tech Gadgets 2026"
+- "Best Gifts for Mom"
+- "Side Hustle Tools I Use"
 
-**Accessible from**: Dashboard (theme button) or Settings
+**Creating a Collection:**
+```
+1. Go to My Pages → Create New
+2. Name your collection (becomes URL slug)
+3. Add products from your library
+4. Customize appearance:
+   ├── Theme colors
+   ├── Header image/banner
+   ├── Bio/about section
+   └── Social links
+5. Preview
+6. Publish
+```
 
-**Customization Options**:
-- Primary color (picker with presets)
+**Collection URL:**
+```
+shopmatic.cc/@username/collection-slug
+Example: shopmatic.cc/@techguru/best-gadgets-2026
+```
+
+### 5.3 Sharing & Tracking
+
+#### For Curators
+- Share collection links anywhere
+- Track:
+  - Page views
+  - Product clicks
+  - Traffic sources
+  - Geography
+  - Top performers
+
+#### For Sharers
+- Share products/collections with "Shared by @username" badge
+- Track clicks on your shares
+- Build reputation as trusted recommender
+
+#### Share Destinations
+- WhatsApp (primary - direct message)
+- Twitter/X
+- Facebook
+- LinkedIn
+- Email
+- Copy link (with tracking)
+
+### 5.4 Affiliate ID Management
+
+**Purpose**: Automatically append affiliate IDs to product links when users click through
+
+**Supported Networks:**
+- Amazon Associates
+- Flipkart Affiliate
+- AppSumo
+- ShareASale
+- CJ Affiliate
+- Custom/Generic
+
+**Setup:**
+1. Settings → Affiliate IDs
+2. Add your affiliate IDs for each network
+3. Set default network
+4. Links auto-append IDs when clicked
+
+### 5.5 Theme Customization
+
+**For Collection Pages:**
+- Primary color
 - Background color
 - Text colors
-- Accent color
-- Border radius style
+- Layout options (grid, list, carousel)
+- Header image
+- Custom bio section
 
-**Preview**: Real-time preview as you customize
+**For Dashboard:**
+- Dark/Light mode
+- Dashboard theme (future)
 
-**Persistence**: Saved to localStorage, applied on page load
+### 5.6 Content Guidelines Enforcement
 
-### 4.3 Affiliate ID Management
+**Automated Checks:**
+- URL validation (block known bad domains)
+- Profanity filter on titles/descriptions
+- Link to product validation
 
-**Purpose**: Automatically append affiliate IDs to product links
+**Manual Review (if flagged):**
+- Report system for users
+- Admin review queue
+- Appeal process
 
-**Setup**:
-1. Go to Settings → Affiliate IDs
-2. Add IDs for each network:
-   - Amazon Associates
-   - ShareASale
-   - CJ Affiliate
-   - Custom networks
-3. Set default network
-4. Links auto-append IDs when copied
+---
 
-### 4.4 Email Configuration
+## 6. Plans & Limits
 
-**Purpose**: Send team invitations and notifications
+### 6.1 Free Plan (Generous to Attract)
 
-**Supported Providers**:
-- EmailIT (default)
-- Resend
-- SendGrid
-- Custom SMTP
+| Feature | Limit |
+|---------|-------|
+| Products | 50 |
+| Collections | 5 |
+| Page Views | 10,000/month |
+| Affiliate Networks | 2 |
+| Custom Domain | ❌ |
+| Team Members | 0 |
+| Analytics Depth | Basic |
+| Support | Community |
 
-**Setup**: Settings → SMTP Configuration → Enter credentials
+### 6.2 Pro Plan ($X/month)
+
+| Feature | Limit |
+|---------|-------|
+| Products | 500 |
+| Collections | 25 |
+| Page Views | Unlimited |
+| Affiliate Networks | 10 |
+| Custom Domain | ✅ |
+| Team Members | 3/collection |
+| Analytics Depth | Advanced |
+| Support | Email |
+
+### 6.3 Enterprise Plan (Custom)
+
+| Feature | Limit |
+|---------|-------|
+| Products | Unlimited |
+| Collections | Unlimited |
+| Page Views | Unlimited |
+| Affiliate Networks | Unlimited |
+| Custom Domain | ✅ |
+| Team Members | Unlimited |
+| Analytics Depth | Full + API |
+| Support | Dedicated |
 
 ---
 
@@ -537,7 +978,41 @@ User pastes URL
                     ┌─────────────────────────────────────┐
                     │ Show error: "Couldn't extract..."   │
                     │ Offer manual entry fallback          │
-                    └─────────────────────────────────────┘
+                     └─────────────────────────────────────┘
+```
+
+### 6.3 Click Tracking Flow
+
+```
+User clicks product on collection page
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  FRONTEND: Capture click data                                                │
+│  ├── product_id, collection_id, curator_id                                  │
+│  ├── referrer, UTM params                                                   │
+│  ├── timestamp, device info                                                  │
+│  ├── sharer_id (from ref param if present)                                 │
+│  └── Send to tracking endpoint (async, don't block navigation)             │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ANALYTICS: Aggregate for curator                                          │
+│  ├── Product clicks (by collection and product)                            │
+│  ├── Traffic sources (direct, social, search)                              │
+│  ├── Geography                                                             │
+│  ├── Sharer attribution (if ref param present)                             │
+│  └── Time-based trends                                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  FOR SHARER: Track their impact                                            │
+│  ├── When ref param present → link click to sharer's account              │
+│  ├── Sharer sees "Your shares led to X clicks"                             │
+│  └── Curator sees "Shared by @username" in attribution                     │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -571,6 +1046,9 @@ User pastes URL
 | SMTP Configuration | 🔄 Partial | UI complete, email sending untested |
 | Analytics Dashboard | 🔄 Partial | Basic stats, GA4 integration pending |
 | Backend Database | 🔄 Partial | Schema exists, migration in progress |
+| Sharer Attribution | 🔄 Planned | ref params, share tracking, attribution display |
+| Content Guidelines | 🔄 Planned | No unethical/illegal products enforcement |
+| WhatsApp Sharing | 🔄 Planned | Direct WhatsApp share with tracking |
 
 ### 7.3 Planned Features 📋
 
@@ -578,11 +1056,26 @@ User pastes URL
 |---------|----------|-------|
 | Email Verification | High | Registration confirmation |
 | Password Reset | High | Email-based reset flow |
+| Sharer Dashboard | High | Track "shared by you" clicks |
+| Content Guidelines | High | Block unethical/illegal products |
 | Social Login | Medium | Google, GitHub OAuth |
 | Bulk Product Import | Medium | CSV import |
-| Custom Domain | Medium | Per-page domains |
+| Custom Domain | Medium | Per-page domains (Pro+) |
 | Mobile App | Low | React Native (future) |
 | API Access | Low | Third-party integrations |
+
+### 7.4 Plan Limits (to implement)
+
+| Feature | Free | Pro | Enterprise |
+|---------|------|-----|-----------|
+| Products | 50 | 500 | Unlimited |
+| Collections | 5 | 25 | Unlimited |
+| Page Views/mo | 10K | Unlimited | Unlimited |
+| Affiliate Networks | 2 | 10 | Unlimited |
+| Custom Domain | ❌ | ✅ | ✅ |
+| Team Members | 0 | 3/collection | Unlimited |
+| Sharer Attribution | Basic | Advanced | Full |
+| API Access | ❌ | ❌ | ✅ |
 
 ---
 
@@ -601,6 +1094,8 @@ User pastes URL
 | Password Reset Incomplete | Users can't recover accounts | Task 1.3 |
 | Onboarding Wizard | May not be fully integrated | Task 1.4 |
 | Session Expiry | No graceful handling | Task 1.5 |
+| Sharer Attribution | Can't track who shared what | Task 1.NEW |
+| Content Guidelines | No enforcement of product rules | Task 1.NEW |
 
 ### 8.2 User Experience (Phase 2)
 
@@ -611,6 +1106,7 @@ User pastes URL
 | Toast Messages | Poor feedback | Task 2.3 |
 | Form Validation | Confusing errors | Task 2.4 |
 | Confirmation Dialogs | Accidental deletions | Task 2.5 |
+| WhatsApp Direct Share | Can't share directly to WhatsApp | Task 2.NEW |
 
 ### 8.3 Accessibility (Phase 3)
 
