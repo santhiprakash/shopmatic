@@ -83,7 +83,7 @@ export default function Dashboard() {
     <div className="flex min-h-screen flex-col">
       <Header />
       
-      <main className="flex-1 container py-6">
+      <main id="main-content" className="flex-1 container py-6">
         <DemoBanner />
         
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">

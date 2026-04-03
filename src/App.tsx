@@ -14,6 +14,7 @@ import CookieConsent from "@/components/compliance/CookieConsent";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import OnboardingWizard from "@/components/onboarding/OnboardingWizard";
 import { trackPageView } from "@/lib/analytics";
+import { SkipLinks } from "@/components/ui/SkipLink";
 
 // Pages
 import Index from "./pages/Index";
@@ -61,10 +62,11 @@ const App = () => (
               <ProductProvider>
                 <TooltipProvider>
                   <Toaster />
-                  <BrowserRouter>
-                  <PageViewTracker />
-                  <OnboardingWizard />
-                  <Routes>
+<BrowserRouter>
+                    <SkipLinks />
+                    <PageViewTracker />
+                    <OnboardingWizard />
+                    <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
