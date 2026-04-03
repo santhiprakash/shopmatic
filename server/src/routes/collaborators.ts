@@ -126,10 +126,10 @@ router.post('/pages/:pageId/collaborators', authenticate, async (req: AuthReques
     );
     
     // TODO: Send invitation email
+    // Token should only be sent via email, never in API response
     
     res.status(201).json({
       message: 'Invitation sent',
-      token, // For debugging, remove in production
     });
   } catch (error) {
     console.error('Invite collaborator error:', error);

@@ -28,6 +28,10 @@ This document tracks all security vulnerabilities found and fixed in the eComJun
 | VULN-10 | CSRF | HIGH | ⏳ Pending | - |
 | VULN-11 | Rate Limiting | MEDIUM | ✅ Fixed | 2026-04-03 |
 | VULN-12 | Rate Limiting | HIGH | ✅ Fixed | 2026-04-03 |
+| VULN-22 | IDOR in User Profile | HIGH | ✅ Fixed | 2026-04-03 |
+| VULN-23 | JWT Token in Response | HIGH | ✅ Fixed | 2026-04-03 |
+| VULN-24 | Unused Zod Validation | HIGH | ✅ Fixed | 2026-04-03 |
+| VULN-25 | XSS in ProductTable | MEDIUM | ✅ Fixed | 2026-04-03 |
 | VULN-13 | Data Exposure | HIGH | 📋 Documented | - |
 | VULN-14 | Data Exposure | HIGH | 📋 Documented | - |
 | VULN-15 | Data Exposure | MEDIUM | ⏳ Pending | - |

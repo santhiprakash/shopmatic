@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import { query } from '../config/database.js';
 import { authenticate, AuthRequest } from '../middleware/auth.js';
+import { validate, validateParams } from '../middleware/validate.js';
 import { z } from 'zod';
 
 const router = Router();
@@ -21,6 +22,10 @@ const createProductSchema = z.object({
 });
 
 const updateProductSchema = createProductSchema.partial();
+
+const uuidParamSchema = z.object({
+  id: z.string().uuid({ message: 'Invalid ID format' }),
+});
 
 router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -90,7 +95,7 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.get('/:id', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/:id', authenticate, validateParams(uuidParamSchema), async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     
@@ -133,7 +138,7 @@ router.get('/:id', authenticate, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
+router.post('/', authenticate, validate(createProductSchema), async (req: AuthRequest, res: Response) => {
   try {
     const {
       title, description, price, currency, affiliateUrl, originalUrl,
@@ -175,7 +180,7 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.patch('/:id', authenticate, async (req: AuthRequest, res: Response) => {
+router.patch('/:id', authenticate, validateParams(uuidParamSchema), validate(updateProductSchema), async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const updates = req.body;
@@ -240,7 +245,7 @@ router.patch('/:id', authenticate, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.delete('/:id', authenticate, async (req: AuthRequest, res: Response) => {
+router.delete('/:id', authenticate, validateParams(uuidParamSchema), async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     

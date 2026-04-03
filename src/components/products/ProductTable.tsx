@@ -29,6 +29,7 @@ import {
   MousePointerClick,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { SecurityUtils } from "@/utils/security";
 
 interface ProductTableProps {
   products: Product[];
@@ -232,7 +233,11 @@ export default function ProductTable({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => window.open(product.link, '_blank')}>
+                        <DropdownMenuItem onClick={() => {
+                          if (SecurityUtils.validateUrl(product.link)) {
+                            window.open(product.link, '_blank');
+                          }
+                        }}>
                           <ExternalLink className="mr-2 h-4 w-4" />
                           Open Link
                         </DropdownMenuItem>

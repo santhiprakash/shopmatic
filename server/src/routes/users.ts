@@ -18,6 +18,11 @@ router.get('/:id', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     
+    // Authorization: Can only view own profile unless admin
+    if (req.user!.id !== id && req.user!.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
     const result = await query(
       `SELECT id, email, first_name, last_name, bio, avatar_url, website_url, 
               social_links, role, subscription_plan, created_at
