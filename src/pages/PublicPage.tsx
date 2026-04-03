@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Share2, ExternalLink, User } from "lucide-react";
 import { SecurityUtils } from "@/utils/security";
+import { generateShareUrl, recordShare } from "@/utils/shareTracking";
 
 interface CollectionData {
   id: string;
@@ -116,28 +117,55 @@ function PublicPageMeta({ meta }: { meta: PageMeta }) {
   );
 }
 
-function ShareButtons({ url, title }: { url: string; title: string }) {
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
+function ShareButtons({ url, title, collectionId, collectionName }: { url: string; title: string; collectionId?: string; collectionName?: string }) {
+  const { user } = useAuth();
+  
+  const handleShare = (source: 'whatsapp' | 'twitter' | 'facebook' | 'linkedin' | 'copy') => {
+    if (user?.username) {
+      recordShare({
+        sharerUsername: user.username,
+        source,
+        collectionId,
+        collectionName,
+      });
+    }
+  };
   
   const copyLink = () => {
-    navigator.clipboard.writeText(url);
+    const shareUrl = generateShareUrl(url, 'copy', user?.username);
+    navigator.clipboard.writeText(shareUrl);
+    handleShare('copy');
   };
   
   const shareToWhatsApp = () => {
+    const shareUrl = generateShareUrl(url, 'whatsapp', user?.username);
+    const encodedUrl = encodeURIComponent(shareUrl);
+    const encodedTitle = encodeURIComponent(title);
     window.open(`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`, "_blank");
+    handleShare('whatsapp');
   };
   
   const shareToTwitter = () => {
+    const shareUrl = generateShareUrl(url, 'twitter', user?.username);
+    const encodedUrl = encodeURIComponent(shareUrl);
+    const encodedTitle = encodeURIComponent(title);
     window.open(`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`, "_blank");
+    handleShare('twitter');
   };
   
   const shareToFacebook = () => {
+    const shareUrl = generateShareUrl(url, 'facebook', user?.username);
+    const encodedUrl = encodeURIComponent(shareUrl);
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, "_blank");
+    handleShare('facebook');
   };
   
   const shareToLinkedIn = () => {
+    const shareUrl = generateShareUrl(url, 'linkedin', user?.username);
+    const encodedUrl = encodeURIComponent(shareUrl);
+    const encodedTitle = encodeURIComponent(title);
     window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`, "_blank");
+    handleShare('linkedin');
   };
 
   return (
@@ -212,7 +240,7 @@ function CollectionPage() {
                   ? `Browse this curated collection of products. Shared with ❤️ on shopmatic.cc`
                   : `Browse curated product collections. Shared on shopmatic.cc`}
               </p>
-              <ShareButtons url={pageUrl} title={collectionName ? `${collectionName} by @${username}` : `@${username}'s Collections`} />
+              <ShareButtons url={pageUrl} title={collectionName ? `${collectionName} by @${username}` : `@${username}'s Collections`} collectionId={collectionSlug} collectionName={collectionName || undefined} />
             </div>
           </div>
 

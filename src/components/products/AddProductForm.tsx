@@ -33,6 +33,7 @@ import BulkProductImport from "./BulkProductImport";
 import AffiliateIdManager from "@/components/affiliate/AffiliateIdManager";
 import { AffiliateUrlService } from "@/services/AffiliateUrlService";
 import { canAddProduct, getRemainingProductSlots, getUpgradeMessage, getPlanDisplayName } from "@/utils/featureGating";
+import { moderateProduct } from "@/utils/contentModeration";
 
 const INITIAL_FORM_DATA: ProductFormData = {
   title: "",
@@ -173,6 +174,12 @@ export default function AddProductForm() {
 
     if (formData.tags.length === 0) {
       toast.error("Please add at least one tag");
+      return;
+    }
+
+    const moderationCheck = moderateProduct(formData.link, formData.title, formData.description);
+    if (!moderationCheck.allowed) {
+      toast.error(moderationCheck.reason || "This product cannot be added due to content policy violations.");
       return;
     }
 

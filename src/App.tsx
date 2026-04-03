@@ -35,6 +35,8 @@ import Analytics from "./pages/Analytics";
 import PublicPage from "./pages/PublicPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
+import SharedByMe from "./pages/SharedByMe";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +81,11 @@ const App = () => (
                     <Analytics />
                   </ProtectedRoute>
                 } />
+                <Route path="/shared-by-me" element={
+                  <ProtectedRoute>
+                    <SharedByMe />
+                  </ProtectedRoute>
+                } />
                 <Route path="/documentation" element={<Documentation />} />
                 <Route path="/privacy-policy" element={<Privacy />} />
                 <Route path="/privacy" element={<Privacy />} />
@@ -104,6 +111,7 @@ const App = () => (
                 <Route path="/@:username/:collectionSlug" element={<PublicPage />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/verify-email" element={<VerifyEmail />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
                 <CookieConsent />

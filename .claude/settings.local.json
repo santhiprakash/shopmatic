@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm install)",
+      "Bash(git rm:*)",
+      "Bash(brew install:*)",
+      "Bash(/opt/homebrew/opt/postgresql@17/bin/psql:*)",
+      "Bash(git add:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run build:dev:*)",
+      "Bash(npx eslint:*)"
+    ]
+  }
+}

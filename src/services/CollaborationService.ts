@@ -29,6 +29,8 @@
 
 import { Database } from '@/lib/neondb';
 import { PageCollaborator, PageInvitation, Page, PageFormData, InviteMemberFormData, TeamMemberLimits, PageRole } from '@/types';
+import { apiRequest, showApiErrorToast, handleApiError } from '@/utils/apiErrorHandler';
+import { csrfFetch, initializeCSRFToken, getCSRFHeaders } from '@/utils/csrf';
 
 // Type aliases for cleaner code
 type PageRow = Database['public']['Tables']['pages']['Row'];
@@ -56,19 +58,13 @@ class CollaborationService {
    * Create a new page
    */
   async createPage(userId: string, pageData: PageFormData): Promise<Page> {
-    const response = await fetch(`${API_BASE_URL}/pages`, {
+    const data = await apiRequest<PageRow>(`${API_BASE_URL}/pages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, ...pageData }),
-      credentials: 'include',
+      retries: 1,
     });
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Failed to create page' }));
-      throw new Error(error.message || 'Failed to create page');
-    }
-
-    const data = await response.json();
     return this.mapPageRowToPage(data);
   }
 
@@ -76,17 +72,11 @@ class CollaborationService {
    * Get all pages for a user
    */
   async getUserPages(userId: string): Promise<Page[]> {
-    const response = await fetch(`${API_BASE_URL}/pages?userId=${userId}`, {
+    const data = await apiRequest<PageRow[]>(`${API_BASE_URL}/pages?userId=${userId}`, {
       method: 'GET',
-      credentials: 'include',
+      retries: 1,
     });
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Failed to get pages' }));
-      throw new Error(error.message || 'Failed to get pages');
-    }
-
-    const data = await response.json();
     return (data || []).map(this.mapPageRowToPage);
   }
 
@@ -134,9 +124,15 @@ class CollaborationService {
    * Update a page
    */
   async updatePage(pageId: string, pageData: Partial<PageFormData>): Promise<Page> {
+    initializeCSRFToken();
+    const csrfHeaders = getCSRFHeaders();
+    
     const response = await fetch(`${API_BASE_URL}/pages/${pageId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        ...csrfHeaders,
+      },
       body: JSON.stringify(pageData),
       credentials: 'include',
     });
@@ -154,8 +150,12 @@ class CollaborationService {
    * Delete a page (soft delete)
    */
   async deletePage(pageId: string): Promise<void> {
+    initializeCSRFToken();
+    const csrfHeaders = getCSRFHeaders();
+    
     const response = await fetch(`${API_BASE_URL}/pages/${pageId}`, {
       method: 'DELETE',
+      headers: csrfHeaders,
       credentials: 'include',
     });
 
@@ -239,9 +239,15 @@ class CollaborationService {
     collaboratorId: string,
     newRole: PageRole
   ): Promise<PageCollaborator> {
+    initializeCSRFToken();
+    const csrfHeaders = getCSRFHeaders();
+    
     const response = await fetch(`${API_BASE_URL}/collaborators/${collaboratorId}/role`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        ...csrfHeaders,
+      },
       body: JSON.stringify({ role: newRole }),
       credentials: 'include',
     });
@@ -259,8 +265,12 @@ class CollaborationService {
    * Remove a collaborator (soft delete)
    */
   async removeCollaborator(collaboratorId: string): Promise<void> {
+    initializeCSRFToken();
+    const csrfHeaders = getCSRFHeaders();
+    
     const response = await fetch(`${API_BASE_URL}/collaborators/${collaboratorId}`, {
       method: 'DELETE',
+      headers: csrfHeaders,
       credentials: 'include',
     });
 

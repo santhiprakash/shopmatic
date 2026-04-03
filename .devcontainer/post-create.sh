@@ -25,7 +25,7 @@ else
 fi
 
 # Vars to inject into config template
-ENV_VARS='${ZAI_API_KEY} ${MINIMAX_API_KEY} ${NVIDIA_API_KEY} ${BRAVE_API_KEY}'
+ENV_VARS='${ZAI_API_KEY} ${MINIMAX_API_KEY} ${NVIDIA_API_KEY} ${CLAUDE_AZURE_FOUNDRY_API_KEY} ${DEEPSEEK_AZURE_OPENAI_API_KEY} ${BRAVE_API_KEY}'
 
 # ============================================================
 # 1. Opencode CLI Setup
@@ -117,7 +117,26 @@ echo "🚀 Dev environment ready!"
 echo "   Run 'opencode' for Opencode CLI"
 echo "   Run 'kilo' for Kilo Code CLI"
 echo ""
-echo "   Available models:"
-echo "   • SPB GLM-5.1 / GLM-5 Turbo / GLM-5  (Z.AI)"
-echo "   • SPB MiniMax M2.7 / M2.5             (MiniMax)"
-echo "   • SPB Kimi K2.5                        (Nvidia)"
+echo "   Provider Groups Available:"
+echo ""
+echo "   📊 SPB Z.ai:"
+echo "      • SPB GLM-5.1, GLM-5, GLM-5 Turbo, GLM-4.7"
+echo ""
+echo "   🤖 SPB MiniMax:"
+echo "      • SPB MiniMax M2.7"
+echo ""
+echo "   🚀 SPB NVIDIA (6 frontier models):"
+echo "      • SPB Kimi K2.5 - multimodal, coding, agentic"
+echo "      • SPB Nemotron 3 Super - reasoning, coding, tool use"
+echo "      • SPB Qwen 3.5 - coding, reasoning, agentic"
+echo "      • SPB Mistral Small 4 - reasoning, coding, multimodal"
+echo "      • SPB Step 3.5 Flash - reasoning, agentic, fast"
+echo "      • SPB Llama 3.2 Vision - vision, reasoning, multimodal"
+echo ""
+echo "   🔵 SPB AZ Kimi (Azure-hosted, segregated):"
+echo "      • SPB AZ Kimi K2.5 - multimodal, coding, agentic"
+echo ""
+echo "   🔵 SPB AZ DeepSeek (Azure-hosted, segregated):"
+echo "      • SPB AZ DeepSeek V3.2 - reasoning, coding, agentic"
+echo "      • SPB AZ DeepSeek V3.2 Speciale - reasoning, coding, agentic"
+echo "      • SPB AZ DeepSeek R1 - deep reasoning"

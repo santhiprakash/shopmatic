@@ -3,7 +3,7 @@
   "provider": {
     "spb-zai": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "SPB Z.AI",
+      "name": "SPB Z.ai",
       "options": {
         "apiKey": "${ZAI_API_KEY}",
         "baseURL": "https://api.z.ai/api/coding/paas/v4"
@@ -13,13 +13,17 @@
           "name": "SPB GLM-5.1",
           "limit": { "context": 202800, "output": 16384 }
         },
+        "glm-5": {
+          "name": "SPB GLM-5",
+          "limit": { "context": 202800, "output": 16384 }
+        },
         "glm-5-turbo": {
           "name": "SPB GLM-5 Turbo",
           "limit": { "context": 202800, "output": 16384 }
         },
-        "glm-5": {
-          "name": "SPB GLM-5",
-          "limit": { "context": 202800, "output": 16384 }
+        "glm-4.7": {
+          "name": "SPB GLM-4.7",
+          "limit": { "context": 200000, "output": 16384 }
         }
       }
     },
@@ -34,24 +38,78 @@
         "MiniMax-M2.7": {
           "name": "SPB MiniMax M2.7",
           "limit": { "context": 204800, "output": 16384 }
-        },
-        "MiniMax-M2.5": {
-          "name": "SPB MiniMax M2.5",
-          "limit": { "context": 204800, "output": 16384 }
         }
       }
     },
     "spb-nvidia": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "SPB Nvidia",
+      "name": "SPB NVIDIA",
       "options": {
         "apiKey": "${NVIDIA_API_KEY}",
         "baseURL": "https://integrate.api.nvidia.com/v1"
       },
       "models": {
         "moonshotai/kimi-k2.5": {
-          "name": "SPB Kimi K2.5",
+          "name": "SPB Kimi K2.5 - multimodal, coding, agentic",
           "limit": { "context": 262000, "output": 16384 }
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "name": "SPB Nemotron 3 Super - reasoning, coding, tool use",
+          "limit": { "context": 1000000, "output": 16384 }
+        },
+        "qwen/qwen3.5-122b-a10b": {
+          "name": "SPB Qwen 3.5 - coding, reasoning, agentic",
+          "limit": { "context": 262000, "output": 16384 }
+        },
+        "mistralai/mistral-small-4-119b-2603": {
+          "name": "SPB Mistral Small 4 - reasoning, coding, multimodal",
+          "limit": { "context": 262000, "output": 16384 }
+        },
+        "stepfun-ai/step-3.5-flash": {
+          "name": "SPB Step 3.5 Flash - reasoning, agentic, fast",
+          "limit": { "context": 262000, "output": 16384 }
+        },
+        "meta/llama-3.2-90b-vision-instruct": {
+          "name": "SPB Llama 3.2 Vision - vision, reasoning, multimodal",
+          "limit": { "context": 131072, "output": 16384 }
+        }
+      }
+    },
+    "spb-az-kimi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SPB AZ Kimi",
+      "options": {
+        "apiKey": "${CLAUDE_AZURE_FOUNDRY_API_KEY}",
+        "baseURL": "https://spb26-resource.services.ai.azure.com/openai/v1"
+      },
+      "models": {
+        "Kimi-K2.5": {
+          "name": "SPB AZ Kimi K2.5 - multimodal, coding, agentic",
+          "limit": { "context": 262000, "output": 16384 }
+        }
+      }
+    },
+    "spb-az-deepseek": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SPB AZ DeepSeek",
+      "options": {
+        "apiKey": "${DEEPSEEK_AZURE_OPENAI_API_KEY}",
+        "baseURL": "https://min-0172-resource.openai.azure.com/openai/v1"
+      },
+      "models": {
+        "DeepSeek-V3.2": {
+          "name": "SPB AZ DeepSeek V3.2 - reasoning, coding, agentic",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "DeepSeek-V3.2-Speciale": {
+          "name": "SPB AZ DeepSeek V3.2 Speciale - reasoning, coding, agentic",
+          "limit": { "context": 128000, "output": 16384 }
+        },
+        "DeepSeek-R1": {
+          "name": "SPB AZ DeepSeek R1 - deep reasoning",
+          "tool_call": false,
+          "reasoning": true,
+          "limit": { "context": 128000, "output": 16384 }
         }
       }
     }
