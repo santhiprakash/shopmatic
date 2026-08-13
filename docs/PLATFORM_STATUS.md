@@ -82,6 +82,7 @@ Shipped in `feat/first-hour-core`:
 | `DEPLOYMENT.md` / `docs/neon-setup.md` told people to put JWT in `VITE_*` | Fixed |
 | `PHASES.md` / `LAUNCH_PLAN.md` last dated April 2026 | Left in place as history; **this file** is current status |
 | `USER_FLOW_DOCUMENTATION.md` is 70k+ and duplicated sections | Do not extend it; change GETTING_STARTED + this file instead |
+| Vercel preview `npm install` failed: Vite 8 vs `@vitejs/plugin-react-swc` 3.x peer range | Bumped plugin to 4.3.x (supports Vite 8) |
 
 ## Suggested contributor lanes (pick one)
 
