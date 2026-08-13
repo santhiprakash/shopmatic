@@ -240,189 +240,31 @@ export interface Analytics {
 
 ## 5. Authentication Setup
 
-Since Neon doesn't provide built-in authentication like Supabase, we'll use a custom authentication solution with JWT tokens.
+Auth lives on the **Express API** (`server/src/routes/auth.ts`), not in the Vite app.
+
+Put the secret only in `server/.env` (or the host env for the API process):
+
+```env
+JWT_SECRET=use-openssl-rand-base64-32
+```
+
+**Do not** put `JWT_SECRET` in a `VITE_*` variable. Anything prefixed `VITE_` is baked into the browser bundle.
+
+The frontend talks to `/api/auth/*` and `/api/users/*`. Username (public handle) is stored on `users.username` and updated via `PATCH /api/users/:id`.
 
 ### Install Authentication Dependencies
 
+These belong in `server/`, not the frontend:
+
 ```bash
+cd server
 npm install jsonwebtoken bcryptjs
 npm install -D @types/jsonwebtoken @types/bcryptjs
 ```
 
-### Create Authentication Service
+### Historical note
 
-Create `src/lib/auth.ts`:
-
-```typescript
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { sql } from './neon';
-
-const JWT_SECRET = import.meta.env.VITE_JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRES_IN = '7d';
-
-export interface AuthUser {
-  id: string;
-  email: string;
-  username: string | null;
-}
-
-export const auth = {
-  // Register new user
-  async register(email: string, password: string, username?: string) {
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user
-    const result = await sql`
-      INSERT INTO users (email, username, email_verified)
-      VALUES (${email}, ${username || null}, false)
-      RETURNING id, email, username
-    `;
-
-    const user = result[0];
-
-    // Store password hash (you'll need to create a passwords table)
-    await sql`
-      INSERT INTO user_passwords (user_id, password_hash)
-      VALUES (${user.id}, ${hashedPassword})
-    `;
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-
-    return { user, token };
-  },
-
-  // Login user
-  async login(email: string, password: string) {
-    // Get user
-    const users = await sql`
-      SELECT u.*, p.password_hash
-      FROM users u
-      JOIN user_passwords p ON u.id = p.user_id
-      WHERE u.email = ${email} AND u.is_active = true
-    `;
-
-    if (users.length === 0) {
-      throw new Error('Invalid email or password');
-    }
-
-    const user = users[0];
-
-    // Verify password
-    const isValid = await bcrypt.compare(password, user.password_hash);
-    if (!isValid) {
-      throw new Error('Invalid email or password');
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-
-    return {
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username
-      },
-      token
-    };
-  },
-
-  // Verify JWT token
-  async verifyToken(token: string): Promise<AuthUser | null> {
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;
-      return decoded;
-    } catch {
-      return null;
-    }
-  },
-
-  // Get current user from token
-  async getCurrentUser(token: string) {
-    const decoded = await this.verifyToken(token);
-    if (!decoded) return null;
-
-    const users = await sql`
-      SELECT id, email, username, first_name, last_name, avatar_url, subscription_plan
-      FROM users
-      WHERE id = ${decoded.id} AND is_active = true
-    `;
-
-    return users[0] || null;
-  },
-
-  // Request password reset
-  async requestPasswordReset(email: string) {
-    const users = await sql`
-      SELECT id FROM users WHERE email = ${email}
-    `;
-
-    if (users.length === 0) {
-      throw new Error('User not found');
-    }
-
-    const user = users[0];
-    const resetToken = jwt.sign(
-      { id: user.id, type: 'password_reset' },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    // Store reset token (you'll need a password_resets table)
-    await sql`
-      INSERT INTO password_resets (user_id, token, expires_at)
-      VALUES (${user.id}, ${resetToken}, NOW() + INTERVAL '1 hour')
-    `;
-
-    return resetToken;
-  },
-
-  // Reset password
-  async resetPassword(token: string, newPassword: string) {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    if (decoded.type !== 'password_reset') {
-      throw new Error('Invalid reset token');
-    }
-
-    // Verify token exists and not expired
-    const resets = await sql`
-      SELECT user_id FROM password_resets
-      WHERE token = ${token} AND expires_at > NOW() AND used = false
-    `;
-
-    if (resets.length === 0) {
-      throw new Error('Invalid or expired reset token');
-    }
-
-    const reset = resets[0];
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update password
-    await sql`
-      UPDATE user_passwords
-      SET password_hash = ${hashedPassword}
-      WHERE user_id = ${reset.user_id}
-    `;
-
-    // Mark token as used
-    await sql`
-      UPDATE password_resets
-      SET used = true
-      WHERE token = ${token}
-    `;
-  }
-};
-```
+An earlier draft of this page showed a client-side `src/lib/auth.ts` that read `import.meta.env.VITE_JWT_SECRET`. That pattern is wrong and must not be copied. Use `server/src/routes/auth.ts` and `process.env.JWT_SECRET`.
 
 ---
 

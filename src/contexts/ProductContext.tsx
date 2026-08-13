@@ -4,8 +4,9 @@ import { Product, FilterOptions, ViewMode, SortOption, ProductFormData } from "@
 import { v4 as uuidv4 } from "uuid";
 import { InputSanitizer } from "@/utils/validation";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
-// Mock data for sample products
+// Sample catalog is only seeded for demo login — real users start empty
 import { sampleProducts } from "@/data/sampleProducts";
 
 type ProductContextType = {
@@ -38,9 +39,17 @@ const defaultFilterOptions: FilterOptions = {
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export const ProductProvider = ({ children }: { children: React.ReactNode }) => {
+  const { isDemo } = useAuth();
   const [products, setProducts] = useState<Product[]>(() => {
     const savedProducts = localStorage.getItem("shopmatic-products");
-    return savedProducts ? JSON.parse(savedProducts) : sampleProducts;
+    if (savedProducts) {
+      try {
+        return JSON.parse(savedProducts);
+      } catch {
+        return [];
+      }
+    }
+    return [];
   });
   
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -52,6 +61,13 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
   useEffect(() => {
     localStorage.setItem("shopmatic-products", JSON.stringify(products));
   }, [products]);
+
+  // Demo login gets a sample catalog so the UI isn't empty
+  useEffect(() => {
+    if (isDemo && products.length === 0) {
+      setProducts(sampleProducts);
+    }
+  }, [isDemo, products.length]);
 
   // Get all unique categories and tags from products
   const productCategories = useMemo(

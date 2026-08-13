@@ -117,9 +117,9 @@ Edit `.env` with your production values:
 # API Keys
 VITE_OPENAI_API_KEY=sk-your-openai-key
 
-# NeonDB Configuration (PostgreSQL)
+# NeonDB Configuration (PostgreSQL) — server only
 DATABASE_URL=postgresql://user:password@your-neon-hostname.neon.tech/shopmatic?sslmode=require
-VITE_NEON_DATABASE_URL=postgresql://user:password@your-neon-hostname.neon.tech/shopmatic?sslmode=require
+JWT_SECRET=use-openssl-rand-base64-32
 
 # Emailit Configuration (emailit.com)
 EMAILIT_API_KEY=eit_your_emailit_api_key

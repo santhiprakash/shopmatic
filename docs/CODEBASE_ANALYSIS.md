@@ -295,11 +295,10 @@ static generateNonce(): string {
 **Frontend (.env)**
 ```env
 VITE_OPENAI_API_KEY=       # Required for AI extraction
-VITE_JWT_SECRET=          # Must match backend
-VITE_NEON_DATABASE_URL=   # Not needed in frontend (uses API)
 VITE_APP_URL=             # Production URL
 VITE_PRODUCTION_URL=      # Canonical URL
 VITE_GA_MEASUREMENT_ID=   # Optional analytics
+# Never put JWT_SECRET or DATABASE_URL in VITE_* — they ship to the browser
 ```
 
 **Backend (server/.env)**

@@ -9,7 +9,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { config } from 'dotenv';
 import { randomBytes } from 'crypto';
 
-// Generate a secure random JWT secret
+// Generate a secure random JWT secret (server-side only)
 const generateJWTSecret = () => {
   return randomBytes(32).toString('base64');
 };
@@ -31,15 +31,11 @@ try {
 const updates = [];
 const jwtSecret = generateJWTSecret();
 
-// Check for JWT_SECRET
-if (!envContent.includes('VITE_JWT_SECRET=') || envContent.includes('VITE_JWT_SECRET=your-')) {
-  if (envContent.includes('VITE_JWT_SECRET=')) {
-    envContent = envContent.replace(/VITE_JWT_SECRET=.*/g, `VITE_JWT_SECRET=${jwtSecret}`);
-    updates.push('Updated VITE_JWT_SECRET');
-  } else {
-    envContent += `\n# Security\nVITE_JWT_SECRET=${jwtSecret}\n`;
-    updates.push('Added VITE_JWT_SECRET');
-  }
+// JWT belongs on the server only. Never write VITE_JWT_SECRET.
+const hasServerJwt = /(^|\n)JWT_SECRET=/m.test(envContent);
+if (!hasServerJwt) {
+  envContent += `\n# Security (server only — do not prefix with VITE_)\nJWT_SECRET=${jwtSecret}\n`;
+  updates.push('Added JWT_SECRET');
 }
 
 // Add placeholder comments for missing R2 credentials
@@ -52,18 +48,6 @@ if (!envContent.includes('R2_ACCOUNT_ID=')) {
 if (envContent.includes('EMAILIT_API_KEY=') && (envContent.includes('EMAILIT_API_KEY=\n') || envContent.includes('EMAILIT_API_KEY=\r'))) {
   envContent = envContent.replace(/EMAILIT_API_KEY=\s*\n/g, 'EMAILIT_API_KEY=\n# EMAILIT_API_KEY=your_emailit_api_key_here\n');
   updates.push('Noted Emailit API key is pending');
-}
-
-// Ensure VITE_NEON_DATABASE_URL matches DATABASE_URL if it's still a placeholder
-if (envContent.includes('VITE_NEON_DATABASE_URL=postgresql://user:password@your-neon-hostname')) {
-  const dbUrlMatch = envContent.match(/DATABASE_URL=(postgresql:\/\/[^\s]+)/);
-  if (dbUrlMatch) {
-    envContent = envContent.replace(
-      /VITE_NEON_DATABASE_URL=.*/,
-      `VITE_NEON_DATABASE_URL=${dbUrlMatch[1]}`
-    );
-    updates.push('Updated VITE_NEON_DATABASE_URL to match DATABASE_URL');
-  }
 }
 
 // Write back
@@ -79,4 +63,3 @@ if (updates.length > 0) {
 } else {
   console.log('✅ .env file is already up to date');
 }
-

@@ -15,6 +15,7 @@ import { randomUUID } from 'crypto';
 // Load environment variables
 config();
 
+// Prefer DATABASE_URL. VITE_NEON_DATABASE_URL is a legacy fallback for old local setups only.
 const databaseUrl = process.env.DATABASE_URL || process.env.VITE_NEON_DATABASE_URL;
 
 if (!databaseUrl) {

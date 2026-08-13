@@ -68,6 +68,50 @@ describe('AuthContext', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockLocalStorage.getItem.mockReturnValue(null);
+
+    vi.mocked(global.fetch).mockImplementation(async (input) => {
+      const url = String(input);
+      if (url.includes('/api/auth/login')) {
+        return {
+          ok: true,
+          json: async () => ({
+            user: {
+              id: '1',
+              email: 'user@example.com',
+              firstName: 'John',
+              lastName: 'Doe',
+              username: 'johndoe',
+              subscriptionPlan: 'free',
+              role: 'affiliate_marketer',
+              createdAt: '2024-01-01T00:00:00.000Z',
+            },
+            token: 'test-token',
+          }),
+        } as Response;
+      }
+      if (url.includes('/api/auth/register')) {
+        return {
+          ok: true,
+          json: async () => ({
+            user: {
+              id: '2',
+              email: 'new@example.com',
+              firstName: 'New',
+              lastName: 'User',
+              username: null,
+              subscriptionPlan: 'free',
+              role: 'affiliate_marketer',
+              createdAt: '2024-01-01T00:00:00.000Z',
+            },
+            token: 'test-token',
+          }),
+        } as Response;
+      }
+      if (url.includes('/api/auth/logout')) {
+        return { ok: true, json: async () => ({ message: 'Logged out successfully' }) } as Response;
+      }
+      return { ok: false, json: async () => ({ error: 'Not found' }) } as Response;
+    });
   });
 
   it('should provide initial unauthenticated state', () => {
