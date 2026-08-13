@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Docs index, Getting Started, and Platform Status (Shopify-simple first hour + contributor lanes)
+- Clean `.env.example` (removed merge-conflict markers; `JWT_SECRET` is server-only)
+
+### Changed
+- README now points at `santhiprakash/shopmatic` and shopmatic.cc
+- CONTRIBUTING clone/upstream URLs match the real repo
+
+### Added
 - Initial open source release
 - Product showcase functionality
 - AI-powered Quick Add feature

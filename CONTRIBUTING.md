@@ -5,7 +5,7 @@ Thank you for your interest in contributing to Shopmatic! This document provides
 
 ## 🤝 Code of Conduct
 
-This project adheres to a Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to info@shopmatic.net.
+This project adheres to a Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior via the GitHub issues on this repository.
 
 ## 🚀 Getting Started
 
@@ -21,29 +21,25 @@ This project adheres to a Code of Conduct. By participating, you are expected to
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/shopmatic-platform.git
-   cd shopmatic-platform
+   git clone https://github.com/YOUR_USERNAME/shopmatic.git
+   cd shopmatic
    ```
 
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/original/shopmatic-platform.git
+   git remote add upstream https://github.com/santhiprakash/shopmatic.git
    ```
 
-4. **Install dependencies**:
+4. **Install, configure, run** (see [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md)):
    ```bash
-   npm install
+   npm install && npm run server:install
+   cp .env.example .env   # set DATABASE_URL and JWT_SECRET
+   npm run db:migrate
+   npm run dev:full
    ```
 
-5. **Create environment file**:
-   ```bash
-   cp .env.example .env.local
-   ```
-
-6. **Start development server**:
-   ```bash
-   npm run dev
-   ```
+   App: http://localhost:8080 · API: http://localhost:3001  
+   Pick work from [docs/PLATFORM_STATUS.md](docs/PLATFORM_STATUS.md).
 
 ## 🐛 Reporting Bugs
 
