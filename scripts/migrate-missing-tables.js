@@ -17,6 +17,7 @@ config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Prefer DATABASE_URL. VITE_NEON_DATABASE_URL is a legacy fallback for old local setups only.
 const databaseUrl = process.env.DATABASE_URL || process.env.VITE_NEON_DATABASE_URL;
 
 if (!databaseUrl) {

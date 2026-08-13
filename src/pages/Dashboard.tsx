@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ThemeCustomizer from "@/components/theme/ThemeCustomizer";
@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Link2, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Copy, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import {
@@ -18,17 +18,35 @@ import {
   Pie,
   Cell,
   Legend,
-  LineChart,
-  Line,
 } from "recharts";
-import { EmptyAnalyticsState } from "@/components/ui/EmptyState";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { getPublicPageUrl } from "@/utils/username";
+import { generateShareUrl, recordShare } from "@/utils/shareTracking";
+import { hasSharedPage, markPageShared } from "@/components/onboarding/SharePageStep";
+import { toast } from "sonner";
 
 export default function Dashboard() {
   const { products, categories, tags } = useProducts();
   const { user } = useAuth();
-  
-  // Check if user is new (has less than 3 products)
-  const isNewUser = products.length < 3;
+  const [shared, setShared] = useState(hasSharedPage());
+
+  const hasHandle = Boolean(user?.username);
+  const hasProduct = products.length >= 1;
+  const pageUrl = user?.username ? getPublicPageUrl(user.username) : null;
+
+  const copyShareLink = async () => {
+    if (!pageUrl || !user?.username) return;
+    const shareUrl = generateShareUrl(pageUrl, "copy", user.username);
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      recordShare({ sharerUsername: user.username, source: "copy" });
+      markPageShared();
+      setShared(true);
+      toast.success("Link copied");
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
 
   const categoryCounts = useMemo(() => categories.map((category) => ({
     name: category,
@@ -64,21 +82,6 @@ export default function Dashboard() {
     }));
   }, [products]);
 
-  const monthlyData = [
-    { name: "Jan", products: 4 },
-    { name: "Feb", products: 7 },
-    { name: "Mar", products: 5 },
-    { name: "Apr", products: 10 },
-    { name: "May", products: 8 },
-    { name: "Jun", products: 12 },
-    { name: "Jul", products: 14 },
-    { name: "Aug", products: 9 },
-    { name: "Sep", products: 11 },
-    { name: "Oct", products: 13 },
-    { name: "Nov", products: 15 },
-    { name: "Dec", products: 17 },
-  ];
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -99,88 +102,120 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Getting Started Section for New Users */}
-        {isNewUser && (
-          <Card className="mb-8 border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                Getting Started
-              </CardTitle>
-              <CardDescription>
-                Complete these steps to set up your product showcase
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={`p-4 rounded-lg border-2 ${products.length > 0 ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
-                  <div className="flex items-start gap-3">
-                    {products.length > 0 ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    ) : (
-                      <div className="h-5 w-5 rounded-full border-2 border-gray-400 mt-0.5 flex-shrink-0" />
-                    )}
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">Add Your First Product</h3>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {products.length > 0 
-                          ? `Great! You've added ${products.length} product${products.length !== 1 ? 's' : ''}.`
-                          : 'Start by adding your first affiliate product to your showcase.'
-                        }
-                      </p>
-                      {products.length === 0 && (
-                        <AddProductForm />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700">
-                  <div className="flex items-start gap-3">
+        <Card className="mb-8 border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-blue-600" />
+              Getting started
+            </CardTitle>
+            <CardDescription>
+              Handle, one product, then share your page. Affiliate IDs and theme are optional.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className={`p-4 rounded-lg border-2 ${hasHandle ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                <div className="flex items-start gap-3">
+                  {hasHandle ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  ) : (
                     <div className="h-5 w-5 rounded-full border-2 border-gray-400 mt-0.5 flex-shrink-0" />
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">Set Up Affiliate IDs</h3>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Add your affiliate IDs to automatically apply them to product links.
-                      </p>
-                      <AffiliateIdManager />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700">
-                  <div className="flex items-start gap-3">
-                    <div className="h-5 w-5 rounded-full border-2 border-gray-400 mt-0.5 flex-shrink-0" />
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">Customize Your Theme</h3>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Personalize your showcase page with custom colors.
-                      </p>
-                      <ThemeCustomizer />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-6 border-t">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">Ready to share your showcase?</p>
-                    <p className="text-xs text-muted-foreground">
-                      Visit your profile page to see your public showcase URL
+                  )}
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1">Choose public handle</h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {hasHandle
+                        ? `Your page is /@${user?.username}`
+                        : 'Pick the URL people will share.'}
                     </p>
+                    {!hasHandle && (
+                      <Button asChild size="sm">
+                        <Link to="/profile">Choose your public handle</Link>
+                      </Button>
+                    )}
                   </div>
-                  <Button asChild variant="outline">
-                    <Link to="/profile">
-                      View Profile
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        )}
+
+              <div className={`p-4 rounded-lg border-2 ${hasProduct ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                <div className="flex items-start gap-3">
+                  {hasProduct ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 border-gray-400 mt-0.5 flex-shrink-0" />
+                  )}
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1">Add first product</h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {hasProduct
+                        ? `${products.length} product${products.length === 1 ? '' : 's'} in your catalog.`
+                        : 'Add one product so the page is not empty.'}
+                    </p>
+                    {!hasProduct && <AddProductForm />}
+                  </div>
+                </div>
+              </div>
+
+              <div className={`p-4 rounded-lg border-2 ${shared && hasHandle ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                <div className="flex items-start gap-3">
+                  {shared && hasHandle ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 border-gray-400 mt-0.5 flex-shrink-0" />
+                  )}
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1">Share your page</h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {hasHandle
+                        ? pageUrl
+                        : 'Available after you pick a handle.'}
+                    </p>
+                    {hasHandle && pageUrl && (
+                      <div className="flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={copyShareLink}>
+                          <Copy className="mr-2 h-3.5 w-3.5" />
+                          Copy link
+                        </Button>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href={pageUrl} target="_blank" rel="noreferrer">
+                            <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                            Open
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium mb-1">Optional: affiliate IDs</p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Auto-apply Amazon / Flipkart / Myntra / Nykaa tags.
+                </p>
+                <AffiliateIdManager />
+              </div>
+              <div>
+                <p className="text-sm font-medium mb-1">Optional: theme</p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Default theme already looks finished.
+                </p>
+                <ThemeCustomizer />
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/profile">
+                  Profile
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
         
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
@@ -204,7 +239,7 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{products.length}</div>
               <p className="text-xs text-muted-foreground">
-                +{products.length > 5 ? products.length - 5 : 0} since last month
+                {products.length === 0 ? 'Add your first product to get started' : 'In your catalog'}
               </p>
             </CardContent>
           </Card>
@@ -231,7 +266,7 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{categories.length}</div>
               <p className="text-xs text-muted-foreground">
-                +{categories.length > 3 ? categories.length - 3 : 0} since last month
+                From your products
               </p>
             </CardContent>
           </Card>
@@ -255,7 +290,7 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{tags.length}</div>
               <p className="text-xs text-muted-foreground">
-                +{tags.length > 5 ? tags.length - 5 : 0} since last month
+                From your products
               </p>
             </CardContent>
           </Card>
@@ -272,42 +307,20 @@ export default function Dashboard() {
             {products.length === 0 ? (
               <Card className="mt-6">
                 <CardContent className="py-16">
-                  <EmptyAnalyticsState />
+                  <EmptyState
+                    icon="analytics"
+                    title="No analytics yet"
+                    description="Add a product and share your page to start tracking views and clicks."
+                    action={
+                      hasHandle
+                        ? { label: "Add your first product", href: "/my-products" }
+                        : { label: "Choose your public handle", href: "/profile" }
+                    }
+                  />
                 </CardContent>
               </Card>
             ) : (
               <>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Products Added Over Time</CardTitle>
-                  </CardHeader>
-                  <CardContent className="pl-2">
-                    <ResponsiveContainer width="100%" height={350}>
-                      <LineChart
-                        data={monthlyData}
-                        margin={{
-                          top: 5,
-                          right: 30,
-                          left: 20,
-                          bottom: 5,
-                        }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line
-                          type="monotone"
-                          dataKey="products"
-                          stroke="#3B82F6"
-                          activeDot={{ r: 8 }}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-                
                 <Card>
                   <CardHeader>
                     <CardTitle>Products by Currency</CardTitle>

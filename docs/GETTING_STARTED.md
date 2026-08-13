@@ -90,9 +90,9 @@ Or in two terminals: `npm run dev` and `npm run dev:server`.
 
 1. Register from the header.
 2. Confirm email if mail is configured (`/verify-email`).
-3. Open **Dashboard** → set username / profile (this is the public `/@username`).
-4. **My products** → add one product (URL paste or manual).
-5. Open `/@username` in a private window. That is the share link.
+3. The first-hour wizard asks for a **public handle** (live availability check). This is required.
+4. Add **one product** in the wizard (Quick Add or the short form). Continue stays disabled until a product exists.
+5. Copy the share link (`/@your-handle`) from the last wizard step, the dashboard checklist, or **Profile**.
 
 ## Scripts
 

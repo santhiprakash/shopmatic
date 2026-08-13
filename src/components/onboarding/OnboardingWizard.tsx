@@ -1,112 +1,137 @@
+import { useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { useOnboarding } from "@/hooks/use-onboarding";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProducts } from "@/contexts/ProductContext";
 import WelcomeStep from "./WelcomeStep";
-import ProfileSetupStep from "./ProfileSetupStep";
-import AffiliateSetupStep from "./AffiliateSetupStep";
+import HandleSetupStep from "./HandleSetupStep";
 import FirstProductStep from "./FirstProductStep";
 import ThemeCustomizationStep from "./ThemeCustomizationStep";
+import SharePageStep from "./SharePageStep";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getOnboardingStartStep, shouldShowOnboarding } from "@/utils/onboarding";
 
-const STEPS = [
-  { name: "Welcome", component: WelcomeStep },
-  { name: "Profile", component: ProfileSetupStep },
-  { name: "Affiliate IDs", component: AffiliateSetupStep },
-  { name: "First Product", component: FirstProductStep },
-  { name: "Theme", component: ThemeCustomizationStep },
-];
+const STEP_NAMES = ["Welcome", "Public handle", "First product", "Theme", "Share"] as const;
+const STEP_KEYS = ["welcome", "handle", "product", "theme", "share"] as const;
 
 export default function OnboardingWizard() {
-  const { isAuthenticated, isDemo } = useAuth();
+  const { isAuthenticated, isDemo, user } = useAuth();
+  const { products } = useProducts();
   const {
     state,
     nextStep,
     previousStep,
+    goToStep,
     completeStep,
     completeOnboarding,
     skipOnboarding,
   } = useOnboarding();
 
-  // Don't show if not authenticated, already completed, or skipped
-  if (!isAuthenticated || state.completed || state.skipped || isDemo) {
+  const username = user?.username;
+  const productCount = products.length;
+  const inProgress =
+    state.currentStep > 0 ||
+    Object.values(state.progress).some(Boolean);
+  const open = shouldShowOnboarding({
+    isAuthenticated,
+    isDemo,
+    username,
+    productCount,
+    completed: state.completed,
+    dismissed: state.skipped,
+    inProgress,
+  });
+
+  useEffect(() => {
+    if (!open) return;
+    const target = getOnboardingStartStep({
+      username,
+      productCount,
+      welcomeSeen: state.progress.welcome,
+    });
+    if (state.currentStep < target) {
+      goToStep(target);
+    }
+    if (!username && state.currentStep > 1) {
+      goToStep(1);
+    }
+  }, [open, username, productCount, state.progress.welcome, state.currentStep, goToStep]);
+
+  if (!open) {
     return null;
   }
 
   const currentStepIndex = state.currentStep;
-  const CurrentStepComponent = STEPS[currentStepIndex].component;
-  const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
+  const progress = ((currentStepIndex + 1) / STEP_NAMES.length) * 100;
+  const canDismiss = Boolean(username);
+  const canGoBack = currentStepIndex > 0 && !(currentStepIndex === 1 && !username);
 
   const handleNext = () => {
-    // Mark current step as completed
-    const stepNames: (keyof typeof state.progress)[] = [
-      "welcome",
-      "profile",
-      "affiliate",
-      "product",
-      "theme",
-    ];
-    completeStep(stepNames[currentStepIndex]);
-
-    if (currentStepIndex === STEPS.length - 1) {
-      completeOnboarding();
+    completeStep(STEP_KEYS[currentStepIndex]);
+    if (currentStepIndex === STEP_NAMES.length - 1) {
+      completeOnboarding(username, productCount);
     } else {
       nextStep();
     }
   };
 
-  const handleSkip = () => {
-    if (currentStepIndex === STEPS.length - 1) {
-      completeOnboarding();
-    } else {
-      skipOnboarding();
-    }
+  const handleComplete = () => {
+    completeOnboarding(username, productCount);
+  };
+
+  const handleRemindLater = () => {
+    skipOnboarding(username);
   };
 
   return (
     <Dialog open={true} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        className="sm:max-w-2xl max-h-[90vh] overflow-y-auto [&>button.absolute]:hidden"
+        onPointerDownOutside={(event) => event.preventDefault()}
+        onEscapeKeyDown={(event) => event.preventDefault()}
+      >
         <div className="space-y-6">
-          {/* Header with progress */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">
-                Step {currentStepIndex + 1} of {STEPS.length}: {STEPS[currentStepIndex].name}
+                Step {currentStepIndex + 1} of {STEP_NAMES.length}: {STEP_NAMES[currentStepIndex]}
               </h2>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={skipOnboarding}
-                className="h-8 w-8"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              {canDismiss && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleRemindLater}
+                  className="h-8 w-8"
+                  aria-label="Remind me on dashboard"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
             </div>
             <Progress value={progress} className="h-2" />
           </div>
 
-          {/* Step content */}
           <div className="min-h-[400px]">
             {currentStepIndex === 0 && (
-              <WelcomeStep onNext={handleNext} onSkip={handleSkip} />
+              <WelcomeStep onNext={handleNext} />
             )}
             {currentStepIndex === 1 && (
-              <ProfileSetupStep onNext={handleNext} onSkip={handleSkip} />
+              <HandleSetupStep onNext={handleNext} />
             )}
             {currentStepIndex === 2 && (
-              <AffiliateSetupStep onNext={handleNext} onSkip={handleSkip} />
+              <FirstProductStep onNext={handleNext} onRemindLater={handleRemindLater} />
             )}
             {currentStepIndex === 3 && (
-              <FirstProductStep onNext={handleNext} onSkip={handleSkip} />
+              <ThemeCustomizationStep onComplete={handleNext} onSkip={handleNext} />
             )}
-            {currentStepIndex === 4 && (
-              <ThemeCustomizationStep onComplete={completeOnboarding} onSkip={handleSkip} />
+            {currentStepIndex === 4 && username && (
+              <SharePageStep username={username} onComplete={handleComplete} />
             )}
           </div>
 
-          {/* Navigation (if needed for future enhancements) */}
-          {currentStepIndex > 0 && (
+          {canGoBack && (
             <div className="flex justify-between">
               <Button variant="outline" onClick={previousStep}>
                 Previous
@@ -119,4 +144,3 @@ export default function OnboardingWizard() {
     </Dialog>
   );
 }
-

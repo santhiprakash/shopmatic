@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { canCompleteOnboarding } from '@/utils/onboarding';
 
 const ONBOARDING_STORAGE_KEY = 'shopmatic-onboarding';
 const ONBOARDING_COMPLETED_KEY = 'shopmatic-onboarding-completed';
+const ONBOARDING_REMIND_KEY = 'shopmatic-onboarding-remind';
+
+export const ONBOARDING_STEP_COUNT = 5;
 
 export interface OnboardingState {
   currentStep: number;
@@ -9,10 +13,10 @@ export interface OnboardingState {
   skipped: boolean;
   progress: {
     welcome: boolean;
-    profile: boolean;
-    affiliate: boolean;
+    handle: boolean;
     product: boolean;
     theme: boolean;
+    share: boolean;
   };
 }
 
@@ -22,61 +26,67 @@ const defaultState: OnboardingState = {
   skipped: false,
   progress: {
     welcome: false,
-    profile: false,
-    affiliate: false,
+    handle: false,
     product: false,
     theme: false,
+    share: false,
   },
 };
 
-export function useOnboarding() {
-  const [state, setState] = useState<OnboardingState>(() => {
-    // Check if onboarding was already completed
-    const completed = localStorage.getItem(ONBOARDING_COMPLETED_KEY) === 'true';
-    if (completed) {
-      return { ...defaultState, completed: true };
-    }
+function loadState(): OnboardingState {
+  const completed = localStorage.getItem(ONBOARDING_COMPLETED_KEY) === 'true';
+  const dismissed = localStorage.getItem(ONBOARDING_REMIND_KEY) === 'true';
 
-    // Load saved progress
-    const saved = localStorage.getItem(ONBOARDING_STORAGE_KEY);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return defaultState;
-      }
+  const saved = localStorage.getItem(ONBOARDING_STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return {
+        ...defaultState,
+        ...parsed,
+        progress: { ...defaultState.progress, ...parsed.progress },
+        completed,
+        skipped: dismissed,
+      };
+    } catch {
+      return { ...defaultState, completed, skipped: dismissed };
     }
-    return defaultState;
-  });
+  }
+
+  return { ...defaultState, completed, skipped: dismissed };
+}
+
+export function useOnboarding() {
+  const [state, setState] = useState<OnboardingState>(loadState);
 
   useEffect(() => {
-    if (!state.completed && !state.skipped) {
+    if (!state.completed) {
       localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(state));
     }
   }, [state]);
 
-  const nextStep = () => {
+  const nextStep = useCallback(() => {
     setState(prev => ({
       ...prev,
-      currentStep: Math.min(prev.currentStep + 1, 4),
+      currentStep: Math.min(prev.currentStep + 1, ONBOARDING_STEP_COUNT - 1),
     }));
-  };
+  }, []);
 
-  const previousStep = () => {
+  const previousStep = useCallback(() => {
     setState(prev => ({
       ...prev,
       currentStep: Math.max(prev.currentStep - 1, 0),
     }));
-  };
+  }, []);
 
-  const goToStep = (step: number) => {
+  const goToStep = useCallback((step: number) => {
     setState(prev => ({
       ...prev,
-      currentStep: Math.max(0, Math.min(step, 4)),
+      currentStep: Math.max(0, Math.min(step, ONBOARDING_STEP_COUNT - 1)),
     }));
-  };
+  }, []);
 
-  const completeStep = (stepName: keyof OnboardingState['progress']) => {
+  const completeStep = useCallback((stepName: keyof OnboardingState['progress']) => {
     setState(prev => ({
       ...prev,
       progress: {
@@ -84,33 +94,48 @@ export function useOnboarding() {
         [stepName]: true,
       },
     }));
-  };
+  }, []);
 
-  const completeOnboarding = () => {
+  const completeOnboarding = useCallback((username?: string | null, productCount = 0): boolean => {
+    if (!canCompleteOnboarding({ username, productCount })) {
+      return false;
+    }
     setState(prev => ({
       ...prev,
       completed: true,
-      currentStep: 4,
+      skipped: false,
+      currentStep: ONBOARDING_STEP_COUNT - 1,
     }));
     localStorage.setItem(ONBOARDING_COMPLETED_KEY, 'true');
     localStorage.removeItem(ONBOARDING_STORAGE_KEY);
-  };
+    localStorage.removeItem(ONBOARDING_REMIND_KEY);
+    return true;
+  }, []);
 
-  const skipOnboarding = () => {
+  /**
+   * Required steps cannot skip the whole wizard.
+   * Without a username this is a no-op (do not set completed).
+   * With a username, dismiss to the dashboard without marking complete.
+   */
+  const skipOnboarding = useCallback((username?: string | null) => {
+    if (!username || !username.trim()) {
+      return;
+    }
     setState(prev => ({
       ...prev,
       skipped: true,
       completed: false,
     }));
-    localStorage.setItem(ONBOARDING_COMPLETED_KEY, 'true');
-    localStorage.removeItem(ONBOARDING_STORAGE_KEY);
-  };
+    localStorage.setItem(ONBOARDING_REMIND_KEY, 'true');
+    localStorage.removeItem(ONBOARDING_COMPLETED_KEY);
+  }, []);
 
-  const resetOnboarding = () => {
+  const resetOnboarding = useCallback(() => {
     setState(defaultState);
     localStorage.removeItem(ONBOARDING_COMPLETED_KEY);
     localStorage.removeItem(ONBOARDING_STORAGE_KEY);
-  };
+    localStorage.removeItem(ONBOARDING_REMIND_KEY);
+  }, []);
 
   return {
     state,
@@ -123,4 +148,3 @@ export function useOnboarding() {
     resetOnboarding,
   };
 }
-

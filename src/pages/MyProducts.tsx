@@ -6,6 +6,8 @@ import Footer from "@/components/layout/Footer";
 import SimpleProductList from "@/components/products/SimpleProductList";
 import CategoryManager from "@/components/products/CategoryManager";
 import DemoBanner from "@/components/auth/DemoBanner";
+import MinimalProductAdd from "@/components/products/MinimalProductAdd";
+import { EmptyProductsState, EmptySearchState } from "@/components/ui/EmptyState";
 import { toast } from "sonner";
 import { getPlanLimits, getRemainingProductSlots, getPlanDisplayName } from "@/utils/featureGating";
 import { getCategoryColors } from "@/utils/categoryColors";
@@ -29,6 +31,7 @@ export default function MyProducts() {
   const { user } = useAuth();
   
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | undefined>(undefined);
+  const [showAddForm, setShowAddForm] = useState(false);
   
   const handleRemoveProduct = (id: string) => {
     removeProduct(id);
@@ -135,17 +138,34 @@ export default function MyProducts() {
           </Select>
         </div>
 
-        {/* Simple Product List */}
-        <SimpleProductList
-          products={filteredProducts}
-          categories={categories}
-          onEdit={(product) => {
-            // Handle edit - can be implemented later
-            toast.info("Edit feature coming soon!");
-          }}
-          onDelete={handleRemoveProduct}
-          selectedCategory={selectedCategoryFilter}
-        />
+        {showAddForm && (
+          <div id="add-product" className="mb-6">
+            <MinimalProductAdd
+              onSuccess={() => setShowAddForm(false)}
+              onCancel={() => setShowAddForm(false)}
+            />
+          </div>
+        )}
+
+        {products.length === 0 && !showAddForm && (
+          <EmptyProductsState onAddProduct={() => setShowAddForm(true)} />
+        )}
+
+        {products.length > 0 && filteredProducts.length === 0 && !showAddForm && (
+          <EmptySearchState />
+        )}
+
+        {filteredProducts.length > 0 && (
+          <SimpleProductList
+            products={filteredProducts}
+            categories={categories}
+            onEdit={() => {
+              toast.info("Edit feature coming soon!");
+            }}
+            onDelete={handleRemoveProduct}
+            selectedCategory={selectedCategoryFilter}
+          />
+        )}
       </main>
       
       <Footer />

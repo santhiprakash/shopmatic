@@ -2,9 +2,9 @@ import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SocialMediaManager from "@/components/profile/SocialMediaManager";
+import PublicHandleCard from "@/components/profile/PublicHandleCard";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { User, Mail, Calendar, Crown, Sparkles, Settings, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import DemoBanner from "@/components/auth/DemoBanner";
@@ -118,20 +118,7 @@ function ProfileContent() {
                   </CardContent>
                 </Card>
 
-                {/* Profile Edit Form - Can be added later */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Profile Information</CardTitle>
-                    <CardDescription>
-                      Update your profile details
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      Profile editing functionality will be available soon.
-                    </p>
-                  </CardContent>
-                </Card>
+                <PublicHandleCard />
               </>
             )}
 

@@ -4,10 +4,9 @@ import { Sparkles, ShoppingBag, TrendingUp, Palette, Zap } from "lucide-react";
 
 interface WelcomeStepProps {
   onNext: () => void;
-  onSkip: () => void;
 }
 
-export default function WelcomeStep({ onNext, onSkip }: WelcomeStepProps) {
+export default function WelcomeStep({ onNext }: WelcomeStepProps) {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-4">
@@ -73,9 +72,6 @@ export default function WelcomeStep({ onNext, onSkip }: WelcomeStepProps) {
       <div className="flex gap-3 justify-center">
         <Button onClick={onNext} size="lg" className="min-w-[120px]">
           Get Started
-        </Button>
-        <Button onClick={onSkip} variant="ghost" size="lg">
-          Skip Tour
         </Button>
       </div>
     </div>

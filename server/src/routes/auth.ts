@@ -64,7 +64,7 @@ router.post('/register', registrationRateLimiter, validate(registerSchema), asyn
     const userResult = await query(
       `INSERT INTO users (email, first_name, last_name, role, subscription_plan) 
        VALUES ($1, $2, $3, 'affiliate_marketer', 'free') 
-       RETURNING id, email, first_name, last_name, role, subscription_plan, created_at`,
+       RETURNING id, email, username, first_name, last_name, role, subscription_plan, created_at`,
       [email.toLowerCase(), firstName || null, lastName || null]
     );
     const user = userResult.rows[0];
@@ -102,10 +102,12 @@ router.post('/register', registrationRateLimiter, validate(registerSchema), asyn
       user: {
         id: user.id,
         email: user.email,
+        username: user.username || null,
         firstName: user.first_name,
         lastName: user.last_name,
         role: user.role,
         subscriptionPlan: user.subscription_plan,
+        createdAt: user.created_at,
       },
       token,
     });
@@ -121,7 +123,7 @@ router.post('/login', authRateLimiter, validate(loginSchema), async (req, res) =
     
     // Get user with password
     const result = await query(
-      `SELECT u.id, u.email, u.first_name, u.last_name, u.role, u.subscription_plan, u.is_active,
+      `SELECT u.id, u.email, u.username, u.first_name, u.last_name, u.role, u.subscription_plan, u.is_active,
               p.password_hash
        FROM users u
        JOIN user_passwords p ON u.id = p.user_id
@@ -162,6 +164,7 @@ router.post('/login', authRateLimiter, validate(loginSchema), async (req, res) =
       user: {
         id: user.id,
         email: user.email,
+        username: user.username || null,
         firstName: user.first_name,
         lastName: user.last_name,
         role: user.role,
@@ -195,7 +198,7 @@ router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => 
 router.get('/me', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const result = await query(
-      `SELECT id, email, first_name, last_name, bio, avatar_url, website_url, 
+      `SELECT id, email, username, first_name, last_name, bio, avatar_url, website_url, 
               social_links, theme_settings, role, subscription_plan, is_active, email_verified, created_at
        FROM users WHERE id = $1`,
       [req.user!.id]
@@ -209,6 +212,7 @@ router.get('/me', authenticate, async (req: AuthRequest, res: Response) => {
     res.json({
       id: user.id,
       email: user.email,
+      username: user.username || null,
       firstName: user.first_name,
       lastName: user.last_name,
       bio: user.bio,

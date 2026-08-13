@@ -26,6 +26,7 @@ import {
   formatPageRole
 } from '@/utils/pagePermissions';
 import { SecurityUtils } from '@/utils/security';
+import { RESERVED_USERNAMES as RESERVED_SLUGS } from '@/utils/username';
 
 interface PageContextType {
   // Page management
@@ -59,40 +60,6 @@ interface PageContextType {
 }
 
 const PageContext = createContext<PageContextType | undefined>(undefined);
-
-// Reserved slugs that cannot be used
-const RESERVED_SLUGS = [
-  'dashboard',
-  'login',
-  'signup',
-  'admin',
-  'api',
-  'settings',
-  'profile',
-  'my-products',
-  'analytics',
-  'help',
-  'help-center',
-  'about',
-  'about-us',
-  'pricing',
-  'features',
-  'privacy',
-  'privacy-policy',
-  'privacy-settings',
-  'terms',
-  'terms-of-service',
-  'cookies',
-  'documentation',
-  'docs',
-  'support',
-  'contact',
-  'account',
-  'billing',
-  'pages',
-  'create-page',
-  'manage-pages',
-];
 
 export const PageProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();

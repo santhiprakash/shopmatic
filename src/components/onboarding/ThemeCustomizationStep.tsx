@@ -60,10 +60,10 @@ export default function ThemeCustomizationStep({ onComplete, onSkip }: ThemeCust
 
       <div className="flex gap-3 justify-center">
         <Button onClick={onComplete} size="lg" className="min-w-[120px]">
-          Complete Setup
+          Continue
         </Button>
         <Button onClick={onSkip} variant="ghost" size="lg">
-          Skip
+          Skip for now
         </Button>
       </div>
     </div>

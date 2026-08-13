@@ -7,6 +7,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
   bio?: string;
@@ -151,6 +152,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return {
       id: apiUser.id,
       email: apiUser.email,
+      username: apiUser.username || undefined,
       name: apiUser.firstName && apiUser.lastName 
         ? `${apiUser.firstName} ${apiUser.lastName}` 
         : apiUser.firstName || apiUser.email.split('@')[0],
@@ -346,8 +348,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         apiUpdates.firstName = nameParts[0];
         apiUpdates.lastName = nameParts.slice(1).join(' ');
       }
-      if (updates.bio) apiUpdates.bio = updates.bio;
+      if (updates.bio !== undefined) apiUpdates.bio = updates.bio;
       if (updates.avatar) apiUpdates.avatarUrl = updates.avatar;
+      if (updates.username !== undefined) apiUpdates.username = updates.username;
 
       const response = await fetch(`${API_BASE_URL}/api/users/${authState.user.id}`, {
         method: 'PATCH',
