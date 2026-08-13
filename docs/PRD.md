@@ -2,7 +2,7 @@
 
 ## 1. Product Overview
 
-**Product Name:** Shopmatic (eComJunction)
+**Product Name:** Shopmatic (Shopmatic)
 
 **Description:**
 Shopmatic is a SaaS platform for influencers and affiliate marketers to create, organize, and share personalized product showcase pages. Users can add affiliate products, organize them with categories and tags, and share their showcase with their audience. The platform supports different user roles and subscription plans, and aims for high accessibility, security, and scalability.

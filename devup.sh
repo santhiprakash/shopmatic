@@ -2,7 +2,7 @@
 # ============================================================
 # SPB Dev Container Launcher
 # Usage: ./devup.sh [project-path]
-# Example: ./devup.sh ~/Projects/ecomjunction
+# Example: ./devup.sh ~/Projects/shopmatic
 # ============================================================
 set -eo pipefail
 

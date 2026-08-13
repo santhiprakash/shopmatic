@@ -17,7 +17,7 @@
 
 ## Overview
 
-The eComJunction collaboration system enables page owners to build teams by inviting members with specific roles and permissions. This system supports the platform's evolution from solo creators to enterprise teams.
+The Shopmatic collaboration system enables page owners to build teams by inviting members with specific roles and permissions. This system supports the platform's evolution from solo creators to enterprise teams.
 
 ### Key Features
 - **Page-Level Teams**: Each page can have its own team with unique members
@@ -1666,4 +1666,4 @@ VITE_PRODUCTION_URL=https://yourdomain.com
 
 **Last Updated**: 2025-01-01
 **Version**: 1.0
-**Maintainer**: eComJunction Team
+**Maintainer**: Shopmatic Team

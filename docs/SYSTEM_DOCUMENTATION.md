@@ -1,6 +1,6 @@
-# eComJunction - Complete System Documentation
+# Shopmatic - Complete System Documentation
 
-**Project:** eComJunction (Shopmatic)
+**Project:** Shopmatic (Shopmatic)
 **Version:** 0.0.0
 **Last Updated:** December 22, 2025
 **Status:** Development Phase
@@ -27,7 +27,7 @@
 
 ## Executive Summary
 
-eComJunction is a SAAS platform designed for influencers and affiliate marketers to showcase and organize their product recommendations. The platform combines AI-powered product extraction, comprehensive theme customization, and robust security features to provide a complete solution for affiliate marketing.
+Shopmatic is a SAAS platform designed for influencers and affiliate marketers to showcase and organize their product recommendations. The platform combines AI-powered product extraction, comprehensive theme customization, and robust security features to provide a complete solution for affiliate marketing.
 
 ### Key Highlights
 
@@ -84,7 +84,7 @@ eComJunction is a SAAS platform designed for influencers and affiliate marketers
 ### Directory Structure
 
 ```
-ecomjunction/
+shopmatic/
 ├── src/
 │   ├── components/          # React components
 │   │   ├── auth/           # Authentication components
@@ -1236,7 +1236,7 @@ VITE_SUPABASE_ANON_KEY=...
 
 # App Configuration
 VITE_ENV=development
-VITE_APP_NAME=eComJunction
+VITE_APP_NAME=Shopmatic
 VITE_APP_URL=http://localhost:8080
 
 # Feature Flags
@@ -1266,7 +1266,7 @@ npm run lint             # Run ESLint
 
 ### Contact Information
 
-**Project**: eComJunction (Shopmatic)
+**Project**: Shopmatic (Shopmatic)
 **Website**: shopmatic.cc
 **Email**: info@shopmatic.cc
 **Address**: Shivakrupa Nilayam, TC Palya, Bengaluru, KA, India - 560036

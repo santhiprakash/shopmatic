@@ -135,7 +135,7 @@ class EmailService {
           'Authorization': `Bearer ${settings.settings.api_key}`,
         },
         body: JSON.stringify({
-          from: `${settings.from_name || 'eComJunction'} <${settings.from_email}>`,
+          from: `${settings.from_name || 'Shopmatic'} <${settings.from_email}>`,
           to: Array.isArray(emailData.to) ? emailData.to.map(r => r.email) : [emailData.to.email],
           subject: emailData.subject,
           html: emailData.html,
@@ -185,7 +185,7 @@ class EmailService {
           ],
           from: {
             email: settings.from_email,
-            name: settings.from_name || 'eComJunction',
+            name: settings.from_name || 'Shopmatic',
           },
           content: [
             { type: 'text/html', value: emailData.html },
@@ -227,7 +227,7 @@ class EmailService {
         body: JSON.stringify({
           from: {
             email: settings.from_email,
-            name: settings.from_name || 'eComJunction',
+            name: settings.from_name || 'Shopmatic',
           },
           to: Array.isArray(emailData.to) ? emailData.to : [emailData.to],
           subject: emailData.subject,
@@ -357,7 +357,7 @@ class EmailService {
         <table role="presentation" style="width: 600px; max-width: 100%; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <tr>
             <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700;">eComJunction</h1>
+              <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700;">Shopmatic</h1>
               <p style="margin: 10px 0 0; color: #e6e6ff; font-size: 16px;">Team Collaboration</p>
             </td>
           </tr>
@@ -400,19 +400,19 @@ class EmailService {
           <tr>
             <td style="padding: 30px; background-color: #f8f9fa; border-top: 1px solid #e0e0e0; border-radius: 0 0 8px 8px;">
               <p style="margin: 0 0 10px; color: #999999; font-size: 12px; line-height: 1.5;">
-                <strong>eComJunction</strong><br>
-                ecomjunction.com
+                <strong>Shopmatic</strong><br>
+                shopmatic.cc
               </p>
               <p style="margin: 15px 0 0; color: #999999; font-size: 11px; line-height: 1.5;">
                 This is a team invitation email sent on behalf of ${inviterName}.
-                You're receiving this because someone invited you to collaborate on their eComJunction page.
+                You're receiving this because someone invited you to collaborate on their Shopmatic page.
               </p>
               <p style="margin: 10px 0 0; color: #999999; font-size: 11px;">
                 <a href="${unsubscribeUrl}" style="color: #667eea; text-decoration: underline;">Unsubscribe from emails</a> |
                 <a href="${window.location.origin}/privacy" style="color: #667eea; text-decoration: underline;">Privacy Policy</a>
               </p>
               <p style="margin: 15px 0 0; color: #999999; font-size: 11px; line-height: 1.5;">
-                © ${new Date().getFullYear()} eComJunction. All rights reserved.
+                © ${new Date().getFullYear()} Shopmatic. All rights reserved.
               </p>
             </td>
           </tr>
@@ -455,12 +455,12 @@ ${invitationUrl}
 NOTE: This invitation will expire in 7 days. If you didn't expect this invitation, you can safely ignore this email.
 
 ---
-eComJunction
-ecomjunction.com
+Shopmatic
+shopmatic.cc
 
 This is a team invitation email sent on behalf of ${inviterName}.
 
-© ${new Date().getFullYear()} eComJunction. All rights reserved.`;
+© ${new Date().getFullYear()} Shopmatic. All rights reserved.`;
   }
 }
 

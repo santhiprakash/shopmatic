@@ -1,10 +1,10 @@
 
-# eComJunction Development Progress
+# Shopmatic Development Progress
 
 ## Project Status: Planning & Initial Development
 
 ### Overview
-This document tracks the development progress of eComJunction, an affiliate product showcase platform. The project is currently in the initial development phase with core UI components being built.
+This document tracks the development progress of Shopmatic, an affiliate product showcase platform. The project is currently in the initial development phase with core UI components being built.
 
 ## Development Phases
 

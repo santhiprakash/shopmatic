@@ -1,7 +1,7 @@
 {
-  "name": "ecomjunction-server",
+  "name": "shopmatic-server",
   "version": "1.0.0",
-  "description": "Backend API for eComJunction platform",
+  "description": "Backend API for Shopmatic platform",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

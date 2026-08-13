@@ -7,7 +7,7 @@
  *   npx ts-node 03_transform_data.ts <export-file.json> <user-email> [user-name]
  *
  * Example:
- *   npx ts-node 03_transform_data.ts ecomjunction-export-2025-12-22.json user@example.com "John Doe"
+ *   npx ts-node 03_transform_data.ts shopmatic-export-2025-12-22.json user@example.com "John Doe"
  */
 
 import { v4 as uuidv4 } from 'uuid';
@@ -255,7 +255,7 @@ function detectPlatform(url: string): string {
 // ============================================
 
 function main() {
-  console.log('🚀 eComJunction Data Transformation Script');
+  console.log('🚀 Shopmatic Data Transformation Script');
   console.log('==========================================\n');
 
   // Parse command line arguments

@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document tracks all security vulnerabilities found and fixed in the eComJunction application. It serves as a reference for the security posture and ongoing security work.
+This document tracks all security vulnerabilities found and fixed in the Shopmatic application. It serves as a reference for the security posture and ongoing security work.
 
 ---
 

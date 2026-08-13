@@ -1,19 +1,19 @@
 /**
  * Export localStorage Data Script
  *
- * Run this script in the browser console to export all eComJunction data
+ * Run this script in the browser console to export all Shopmatic data
  * from localStorage to a JSON file.
  *
  * Usage:
- * 1. Open eComJunction in your browser
+ * 1. Open Shopmatic in your browser
  * 2. Open Developer Console (F12)
  * 3. Copy and paste this entire script
  * 4. Press Enter
  * 5. A JSON file will be downloaded automatically
  */
 
-(function exportEcomJunctionData() {
-  console.log('🚀 Starting eComJunction Data Export...');
+(function exportShopmaticData() {
+  console.log('🚀 Starting Shopmatic Data Export...');
   console.log('=====================================\n');
 
   const exportData = {
@@ -111,7 +111,7 @@
 
   // Generate file name
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
-  const fileName = `ecomjunction-export-${timestamp}.json`;
+  const fileName = `shopmatic-export-${timestamp}.json`;
 
   // Download as JSON file
   try {

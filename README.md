@@ -1,9 +1,9 @@
 
-# eComJunction - Product Showcase Platform
+# Shopmatic - Product Showcase Platform
 
 A powerful SAAS platform for influencers and affiliate marketers to showcase and organize their product recommendations with AI-powered Quick Add functionality.
 
-![eComJunction Platform](https://via.placeholder.com/800x400/0066CC/FFFFFF?text=eComJunction+Platform)
+![Shopmatic Platform](https://via.placeholder.com/800x400/0066CC/FFFFFF?text=Shopmatic+Platform)
 
 ## 🚀 Features
 
@@ -39,8 +39,8 @@ A powerful SAAS platform for influencers and affiliate marketers to showcase and
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ecomjunction-platform.git
-cd ecomjunction-platform
+git clone https://github.com/yourusername/shopmatic-platform.git
+cd shopmatic-platform
 ```
 
 ### 2. Install Dependencies
@@ -138,28 +138,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Support
 
-- 📧 Email: info@ecomjunction.net
-- 🌐 Website: [ecomjunction.net](https://ecomjunction.net)
+- 📧 Email: info@shopmatic.net
+- 🌐 Website: [shopmatic.net](https://shopmatic.net)
 - 📖 Documentation: [View Documentation](src/pages/Documentation.tsx)
 
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/ecomjunction-platform)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/shopmatic-platform)
 
 ### Netlify
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/ecomjunction-platform)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/shopmatic-platform)
 
 ### Docker
 
 ```bash
 # Build the image
-docker build -t ecomjunction .
+docker build -t shopmatic .
 
 # Run the container
-docker run -p 3000:3000 ecomjunction
+docker run -p 3000:3000 shopmatic
 ```
 
 ### Manual Deployment
@@ -203,7 +203,7 @@ devpod up . --ide none
 devpod up . --provider ssh --ide none
 
 # Connect and start coding
-devpod ssh ecomjunction
+devpod ssh shopmatic
 opencode    # or: kilo
 ```
 
@@ -217,4 +217,4 @@ See the [devcontainer-template README](https://github.com/user/devcontainer-temp
 
 ---
 
-Made with ❤️ by the eComJunction team
+Made with ❤️ by the Shopmatic team

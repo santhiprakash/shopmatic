@@ -21,7 +21,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'ecomjunction@1.0.0'
+      'X-Client-Info': 'shopmatic@1.0.0'
     }
   }
 });

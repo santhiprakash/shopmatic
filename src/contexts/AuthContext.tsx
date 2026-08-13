@@ -260,7 +260,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isDemo: false,
       });
 
-      toast.success(`Welcome to eComJunction, ${name}!`);
+      toast.success(`Welcome to Shopmatic, ${name}!`);
     } catch (error) {
       setAuthState(prev => ({ ...prev, isLoading: false }));
       const message = error instanceof Error ? error.message : 'Registration failed';
@@ -277,7 +277,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isDemo: true,
     });
 
-    toast.success('Welcome to the eComJunction demo!', {
+    toast.success('Welcome to the Shopmatic demo!', {
       description: 'You can explore all features. Data will not be saved.',
     });
   };

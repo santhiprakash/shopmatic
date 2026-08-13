@@ -1,4 +1,4 @@
-# eComJunction Implementation Phases
+# Shopmatic Implementation Phases
 
 **Document Version:** 1.0  
 **Created:** 2026-04-03  

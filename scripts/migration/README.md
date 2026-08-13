@@ -1,6 +1,6 @@
-# eComJunction Migration Scripts
+# Shopmatic Migration Scripts
 
-Migration scripts to migrate eComJunction from localStorage to Neon PostgreSQL database.
+Migration scripts to migrate Shopmatic from localStorage to Neon PostgreSQL database.
 
 ## Overview
 
@@ -49,11 +49,11 @@ npm install
 
 ### Step 1: Export localStorage Data
 
-1. Open eComJunction in your browser
+1. Open Shopmatic in your browser
 2. Open Developer Console (F12 or Cmd+Option+I)
 3. Copy the contents of `02_export_localstorage.js`
 4. Paste into the console and press Enter
-5. A JSON file will be downloaded (e.g., `ecomjunction-export-2025-12-22.json`)
+5. A JSON file will be downloaded (e.g., `shopmatic-export-2025-12-22.json`)
 
 ### Step 2: Transform Data
 
@@ -65,11 +65,11 @@ npx ts-node 03_transform_data.ts <export-file.json> <user-email> [user-name]
 
 **Example:**
 ```bash
-npx ts-node 03_transform_data.ts ecomjunction-export-2025-12-22.json user@example.com "John Doe"
+npx ts-node 03_transform_data.ts shopmatic-export-2025-12-22.json user@example.com "John Doe"
 ```
 
 **Output:**
-- Creates `transformed-ecomjunction-export-2025-12-22.json`
+- Creates `transformed-shopmatic-export-2025-12-22.json`
 - Includes user profile, products, and categories
 
 ### Step 3: Import to Neon
@@ -203,7 +203,7 @@ After successful migration:
 ## Schema Version
 
 Current schema version: **1.0**
-Compatible with: eComJunction v0.0.0+
+Compatible with: Shopmatic v0.0.0+
 
 ## Changes from Supabase Schema
 
@@ -219,4 +219,4 @@ Main differences from the original Supabase migration:
 
 ## License
 
-Internal use only - eComJunction Migration Scripts
+Internal use only - Shopmatic Migration Scripts

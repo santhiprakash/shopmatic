@@ -2,7 +2,7 @@
 
 ## Overview
 
-eComJunction uses Neon DB as its PostgreSQL database provider. Neon provides serverless PostgreSQL with automatic scaling, branching, and built-in connection pooling.
+Shopmatic uses Neon DB as its PostgreSQL database provider. Neon provides serverless PostgreSQL with automatic scaling, branching, and built-in connection pooling.
 
 ---
 
@@ -16,7 +16,7 @@ eComJunction uses Neon DB as its PostgreSQL database provider. Neon provides ser
 ### Step 2: Create a New Project
 1. Click "Create Project" in the Neon dashboard
 2. Configure your project:
-   - **Project Name:** ecomjunction-production (or your preferred name)
+   - **Project Name:** shopmatic-production (or your preferred name)
    - **Region:** Choose closest to your users (e.g., US East, EU West, Asia Pacific)
    - **PostgreSQL Version:** 16 (recommended) or 15
    - **Compute Size:** Start with 0.25 vCPU (can scale later)
@@ -47,7 +47,7 @@ DATABASE_URL=postgresql://[user]:[password]@[host]/[database]?sslmode=require
 DATABASE_POOLED_URL=postgresql://[user]:[password]@[host]/[database]?sslmode=require&pgbouncer=true
 
 # Application Settings
-VITE_APP_NAME=eComJunction
+VITE_APP_NAME=Shopmatic
 VITE_APP_URL=http://localhost:8080
 
 # API Keys

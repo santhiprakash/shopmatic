@@ -64,8 +64,8 @@ npm install -g wrangler
 wrangler login
 
 # Create R2 bucket
-wrangler r2 bucket create ecomjunction-production
-wrangler r2 bucket create ecomjunction-staging
+wrangler r2 bucket create shopmatic-production
+wrangler r2 bucket create shopmatic-staging
 ```
 
 ### 2. Environment Configuration
@@ -75,11 +75,11 @@ wrangler r2 bucket create ecomjunction-staging
 R2_ACCOUNT_ID=your_account_id
 R2_ACCESS_KEY_ID=your_access_key
 R2_SECRET_ACCESS_KEY=your_secret_key
-R2_BUCKET_NAME=ecomjunction-production
-R2_PUBLIC_URL=https://cdn.ecomjunction.com
+R2_BUCKET_NAME=shopmatic-production
+R2_PUBLIC_URL=https://cdn.shopmatic.dev
 
 # Optional: Custom domain for R2
-R2_CUSTOM_DOMAIN=cdn.ecomjunction.com
+R2_CUSTOM_DOMAIN=cdn.shopmatic.dev
 ```
 
 ### 3. Install Dependencies
@@ -335,14 +335,14 @@ export function ImageUpload({ onUpload, type = 'product' }) {
 ```bash
 # In Cloudflare Dashboard:
 # 1. Go to R2 > Bucket > Settings
-# 2. Add custom domain: cdn.ecomjunction.com
+# 2. Add custom domain: cdn.shopmatic.dev
 # 3. Cloudflare will create DNS records automatically
 ```
 
 ### 2. Update Environment
 
 ```env
-R2_PUBLIC_URL=https://cdn.ecomjunction.com
+R2_PUBLIC_URL=https://cdn.shopmatic.dev
 ```
 
 ---
@@ -513,7 +513,7 @@ describe('Storage Service', () => {
   it('should upload image', async () => {
     const buffer = await fs.readFile('test-image.jpg');
     const url = await storage.uploadImage(buffer, 'test/image.jpg');
-    expect(url).toContain('cdn.ecomjunction.com');
+    expect(url).toContain('cdn.shopmatic.dev');
   });
 
   it('should delete image', async () => {

@@ -2,7 +2,7 @@
 
 ## Overview
 
-eComJunction uses **Razorpay** for Indian users and **PayPal** for international users, providing seamless payment processing across regions.
+Shopmatic uses **Razorpay** for Indian users and **PayPal** for international users, providing seamless payment processing across regions.
 
 ---
 
@@ -133,7 +133,7 @@ PAYPAL_CLIENT_SECRET=your_client_secret
 PAYPAL_MODE=live # or 'sandbox' for testing
 
 # Application
-VITE_APP_URL=https://ecomjunction.com
+VITE_APP_URL=https://shopmatic.dev
 ```
 
 ---
@@ -701,7 +701,7 @@ export function RazorpayCheckout({ plan }: { plan: 'pro' | 'enterprise' }) {
           key: import.meta.env.VITE_RAZORPAY_KEY_ID,
           amount: order.amount,
           currency: order.currency,
-          name: 'eComJunction',
+          name: 'Shopmatic',
           description: `${plan.toUpperCase()} Plan Subscription`,
           order_id: order.id,
           handler: async (response: any) => {

@@ -1,6 +1,6 @@
-# eComJunction Setup Guide
+# Shopmatic Setup Guide
 
-This guide will help you set up the eComJunction project with all the new features including Supabase integration, social media management, and affiliate ID management.
+This guide will help you set up the Shopmatic project with all the new features including Supabase integration, social media management, and affiliate ID management.
 
 ## Prerequisites
 
@@ -12,8 +12,8 @@ This guide will help you set up the eComJunction project with all the new featur
 ## 1. Clone and Install
 
 ```bash
-git clone https://github.com/santhiprakash/ecomjunction.git
-cd ecomjunction
+git clone https://github.com/santhiprakash/shopmatic.git
+cd shopmatic
 npm install
 ```
 
@@ -34,7 +34,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 VITE_OPENAI_API_KEY=your_openai_api_key_here
 
 # Application Settings
-VITE_APP_NAME=eComJunction
+VITE_APP_NAME=Shopmatic
 VITE_APP_URL=http://localhost:5173
 ```
 

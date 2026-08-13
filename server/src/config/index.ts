@@ -26,7 +26,7 @@ export const config = {
   email: {
     apiKey: process.env.EMAILIT_API_KEY || '',
     fromEmail: process.env.EMAILIT_FROM_EMAIL || 'notifications@shopmatic.cc',
-    fromName: process.env.EMAILIT_FROM_NAME || 'eComJunction',
+    fromName: process.env.EMAILIT_FROM_NAME || 'Shopmatic',
   },
   
   frontend: {

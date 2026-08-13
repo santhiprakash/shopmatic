@@ -2,7 +2,7 @@
 
 ## Overview
 
-eComJunction is designed to be deployed on any platform - Railway, Vercel, your own VPS, or any other hosting provider. This guide covers deployment strategies for maximum flexibility and easy migration.
+Shopmatic is designed to be deployed on any platform - Railway, Vercel, your own VPS, or any other hosting provider. This guide covers deployment strategies for maximum flexibility and easy migration.
 
 ---
 
@@ -171,12 +171,12 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo npm install -g pm2
 
 # Create app directory
-sudo mkdir -p /var/www/ecomjunction
-sudo chown $USER:$USER /var/www/ecomjunction
+sudo mkdir -p /var/www/shopmatic
+sudo chown $USER:$USER /var/www/shopmatic
 
 # Clone repository
-cd /var/www/ecomjunction
-git clone https://github.com/yourusername/ecomjunction.git .
+cd /var/www/shopmatic
+git clone https://github.com/yourusername/shopmatic.git .
 
 # Install dependencies
 npm install
@@ -186,19 +186,19 @@ npm run build
 
 # Set up PostgreSQL
 sudo -u postgres psql << EOF
-CREATE DATABASE ecomjunction;
-CREATE USER ecomjunction WITH ENCRYPTED PASSWORD 'your_password';
-GRANT ALL PRIVILEGES ON DATABASE ecomjunction TO ecomjunction;
+CREATE DATABASE shopmatic;
+CREATE USER shopmatic WITH ENCRYPTED PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE shopmatic TO shopmatic;
 EOF
 
 # Run migrations
-DATABASE_URL="postgresql://ecomjunction:your_password@localhost/ecomjunction" \
+DATABASE_URL="postgresql://shopmatic:your_password@localhost/shopmatic" \
   npm run migrate
 
 # Create .env file
 cat > .env << EOF
-DATABASE_URL=postgresql://ecomjunction:your_password@localhost/ecomjunction
-DATABASE_POOLED_URL=postgresql://ecomjunction:your_password@localhost/ecomjunction
+DATABASE_URL=postgresql://shopmatic:your_password@localhost/shopmatic
+DATABASE_POOLED_URL=postgresql://shopmatic:your_password@localhost/shopmatic
 VITE_AUTH0_DOMAIN=your-domain.auth0.com
 VITE_AUTH0_CLIENT_ID=your_client_id
 R2_ACCESS_KEY_ID=your_key
@@ -207,15 +207,15 @@ R2_SECRET_ACCESS_KEY=your_secret
 EOF
 
 # Start with PM2
-pm2 start npm --name "ecomjunction" -- start
+pm2 start npm --name "shopmatic" -- start
 pm2 save
 pm2 startup
 
 # Configure Nginx
-sudo tee /etc/nginx/sites-available/ecomjunction << EOF
+sudo tee /etc/nginx/sites-available/shopmatic << EOF
 server {
     listen 80;
-    server_name ecomjunction.com www.ecomjunction.com;
+    server_name shopmatic.dev www.shopmatic.dev;
 
     location / {
         proxy_pass http://localhost:8080;
@@ -229,12 +229,12 @@ server {
 EOF
 
 # Enable site
-sudo ln -s /etc/nginx/sites-available/ecomjunction /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/shopmatic /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 
 # Get SSL certificate
-sudo certbot --nginx -d ecomjunction.com -d www.ecomjunction.com
+sudo certbot --nginx -d shopmatic.dev -d www.shopmatic.dev
 
 echo "Deployment complete!"
 ```
@@ -295,7 +295,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/ecomjunction
+      - DATABASE_URL=postgresql://postgres:password@db:5432/shopmatic
       - NODE_ENV=production
     env_file:
       - .env
@@ -306,7 +306,7 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=ecomjunction
+      - POSTGRES_DB=shopmatic
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     volumes:
@@ -361,15 +361,15 @@ DATABASE_POOLED_URL=postgresql://user:password@host:5432/database?pgbouncer=true
 # Auth0
 VITE_AUTH0_DOMAIN=your-domain.auth0.com
 VITE_AUTH0_CLIENT_ID=your_client_id
-VITE_AUTH0_AUDIENCE=https://api.ecomjunction.com
+VITE_AUTH0_AUDIENCE=https://api.shopmatic.dev
 AUTH0_CLIENT_SECRET=your_client_secret
 
 # Cloudflare R2
 R2_ACCOUNT_ID=your_account_id
 R2_ACCESS_KEY_ID=your_access_key
 R2_SECRET_ACCESS_KEY=your_secret_key
-R2_BUCKET_NAME=ecomjunction-production
-R2_PUBLIC_URL=https://cdn.ecomjunction.com
+R2_BUCKET_NAME=shopmatic-production
+R2_PUBLIC_URL=https://cdn.shopmatic.dev
 
 # OpenAI
 VITE_OPENAI_API_KEY=your_openai_key
@@ -385,7 +385,7 @@ PAYPAL_CLIENT_SECRET=your_client_secret
 PAYPAL_MODE=live
 
 # Application
-VITE_APP_URL=https://ecomjunction.com
+VITE_APP_URL=https://shopmatic.dev
 NODE_ENV=production
 PORT=8080
 ```
@@ -563,7 +563,7 @@ pg_dump $DATABASE_URL | gzip > $BACKUP_DIR/db_$DATE.sql.gz
 
 # Upload to R2
 aws s3 cp $BACKUP_DIR/db_$DATE.sql.gz \
-  s3://ecomjunction-backups/db_$DATE.sql.gz \
+  s3://shopmatic-backups/db_$DATE.sql.gz \
   --endpoint-url https://...
 
 # Keep only last 30 days

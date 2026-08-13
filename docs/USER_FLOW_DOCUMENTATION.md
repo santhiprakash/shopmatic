@@ -1,4 +1,4 @@
-# eComJunction User Flow Documentation
+# Shopmatic User Flow Documentation
 
 **Document Version:** 2.0  
 **Last Updated:** 2026-04-03  
@@ -56,7 +56,7 @@ shopmatic.cc is a SAAS platform that empowers **Curators** (influencers and affi
 
 ### 1.2 Core Value Proposition
 
-| User Need | How eComJunction Addresses It |
+| User Need | How Shopmatic Addresses It |
 |-----------|-------------------------------|
 | "I find products online but can't easily organize them" | AI extracts product details from any URL |
 | "I want to share my recommendations professionally" | Beautiful, shareable storefronts with themes |
@@ -343,7 +343,7 @@ shopmatic.cc is a SAAS platform that empowers **Curators** (influencers and affi
 │                          NEW USER DISCOVERY                                 │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-[User finds eComJunction via]
+[User finds Shopmatic via]
         │
         ├── Google Search (productivity/catalog tools)
         ├── Social Media (Twitter, LinkedIn, YouTube)
@@ -825,7 +825,7 @@ Example: shopmatic.cc/@techguru/best-gadgets-2026
 
 ```
 Hour 0: Discovery
-├── Land on eComJunction.com
+├── Land on Shopmatic.com
 ├── Read about features
 ├── Click "Get Started Free"
 └── Register with email
@@ -864,7 +864,7 @@ Morning: Check Stats
 
 Mid-Day: Content Addition
 ├── Find new product online
-├── Copy URL to eComJunction
+├── Copy URL to Shopmatic
 ├── AI extracts product details
 ├── Edit description for audience
 ├── Add to existing page
@@ -1160,7 +1160,7 @@ User clicks product on collection page
 
 | Role | Description |
 |------|-------------|
-| **Platform Admin** | eComJunction staff, access to all |
+| **Platform Admin** | Shopmatic staff, access to all |
 | **Affiliate Marketer** | Content creator, creates pages/products |
 | **End User** | Anonymous visitor, browses public pages |
 

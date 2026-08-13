@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-eComJunction is a SAAS platform for influencers and affiliate marketers to showcase and organize product recommendations. The platform features AI-powered product extraction from URLs using OpenAI's GPT-4o-mini model.
+Shopmatic is a SAAS platform for influencers and affiliate marketers to showcase and organize product recommendations. The platform features AI-powered product extraction from URLs using OpenAI's GPT-4o-mini model.
 
 ## Development Commands
 
@@ -193,7 +193,7 @@ eComJunction is a SAAS platform for influencers and affiliate marketers to showc
 ### Demo Login Credentials
 - **Email**: user@example.com or pro@example.com
 - **Password**: password123
-- **Admin**: admin@ecomjunction.com / admin123
+- **Admin**: admin@shopmatic.dev / admin123
 - **Demo Mode**: Click "Demo Login" for instant access without account creation
 
 ### Role-Based Access Control (RBAC)

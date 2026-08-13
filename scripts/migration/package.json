@@ -1,7 +1,7 @@
 {
-  "name": "ecomjunction-migration-scripts",
+  "name": "shopmatic-migration-scripts",
   "version": "1.0.0",
-  "description": "Migration scripts for eComJunction localStorage to Neon DB",
+  "description": "Migration scripts for Shopmatic localStorage to Neon DB",
   "private": true,
   "scripts": {
     "transform": "ts-node 03_transform_data.ts",

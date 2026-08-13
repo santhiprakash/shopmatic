@@ -1,4 +1,4 @@
-# eComJunction Launch Plan
+# Shopmatic Launch Plan
 
 **Last Updated:** April 2, 2026  
 **Current Phase:** Phase 3 - Backend Foundation  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-eComJunction is a SAAS platform enabling influencers and affiliate marketers to showcase and organize product recommendations with AI-powered product extraction. This document outlines the implementation phases, current progress, and roadmap to production launch.
+Shopmatic is a SAAS platform enabling influencers and affiliate marketers to showcase and organize product recommendations with AI-powered product extraction. This document outlines the implementation phases, current progress, and roadmap to production launch.
 
 ### Tech Stack
 | Component | Technology |
@@ -370,7 +370,7 @@ server/
 ```bash
 # Using DevPod (recommended)
 devpod up . --ide none
-devpod ssh ecomjunction
+devpod ssh shopmatic
 
 # Inside container:
 npm run dev          # Frontend on port 8080
@@ -410,7 +410,7 @@ git push origin feature/backend-auth
 ```env
 VITE_API_URL=http://localhost:3001
 VITE_OPENAI_API_KEY=sk-xxx
-VITE_APP_NAME=eComJunction
+VITE_APP_NAME=Shopmatic
 VITE_APP_URL=http://localhost:8080
 ```
 

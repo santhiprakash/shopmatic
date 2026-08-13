@@ -307,7 +307,7 @@ async chatAssistant(messages: ChatMessage[], context?: {
   user?: User;
 }) {
   const systemPrompt = `
-    You are an AI assistant for eComJunction, a platform for affiliate marketers.
+    You are an AI assistant for Shopmatic, a platform for affiliate marketers.
     Help users with:
     - Product management
     - Content creation

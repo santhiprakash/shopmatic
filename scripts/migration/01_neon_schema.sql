@@ -1,9 +1,9 @@
 -- ============================================
--- NEON DATABASE SCHEMA FOR ECOMJUNCTION
+-- NEON DATABASE SCHEMA FOR SHOPMATIC
 -- ============================================
 -- Version: 1.0
 -- Date: December 22, 2025
--- Description: Complete database schema for eComJunction platform
+-- Description: Complete database schema for Shopmatic platform
 --              Migrating from localStorage to Neon PostgreSQL
 -- ============================================
 
@@ -597,12 +597,12 @@ $$ LANGUAGE plpgsql;
 -- ============================================
 
 -- Insert a comment to mark schema version
-COMMENT ON SCHEMA public IS 'eComJunction Schema v1.0 - December 22, 2025';
+COMMENT ON SCHEMA public IS 'Shopmatic Schema v1.0 - December 22, 2025';
 
 -- Success message
 DO $$
 BEGIN
-    RAISE NOTICE 'eComJunction database schema created successfully!';
+    RAISE NOTICE 'Shopmatic database schema created successfully!';
     RAISE NOTICE 'Schema version: 1.0';
     RAISE NOTICE 'Tables created: users, products, categories, analytics, affiliate_ids, sessions, api_keys';
     RAISE NOTICE 'Views created: user_product_stats, product_analytics_summary, analytics_daily_stats, top_products';

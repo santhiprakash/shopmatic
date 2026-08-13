@@ -125,7 +125,7 @@ VITE_ENABLE_EMAIL_NOTIFICATIONS=true
 ### 4. Application Settings
 
 #### VITE_APP_NAME
-- Your application name (e.g., "eComJunction", "Shopmatic")
+- Your application name (e.g., "Shopmatic", "Shopmatic")
 
 #### VITE_APP_URL / VITE_PRODUCTION_URL
 - Your production domain URL (e.g., `https://yourdomain.com`)

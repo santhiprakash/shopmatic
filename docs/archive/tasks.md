@@ -1,5 +1,5 @@
 
-# eComJunction - Task Management
+# Shopmatic - Task Management
 
 ## Current Sprint: UI Redesign Based on Reference Design
 
@@ -12,7 +12,7 @@
 **Dependencies:** None
 
 **Requirements:**
-- [ ] Implement clean navigation with "AffiliateHub" branding (or eComJunction)
+- [ ] Implement clean navigation with "AffiliateHub" branding (or Shopmatic)
 - [ ] Add user profile section with avatar and username display
 - [ ] Create responsive navigation menu (Home, Dashboard, My Products, Analytics, Help Center)
 - [ ] Implement mobile hamburger menu

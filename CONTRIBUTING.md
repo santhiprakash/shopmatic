@@ -1,11 +1,11 @@
 
-# Contributing to eComJunction
+# Contributing to Shopmatic
 
-Thank you for your interest in contributing to eComJunction! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to Shopmatic! This document provides guidelines for contributing to the project.
 
 ## 🤝 Code of Conduct
 
-This project adheres to a Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to info@ecomjunction.net.
+This project adheres to a Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to info@shopmatic.net.
 
 ## 🚀 Getting Started
 
@@ -21,13 +21,13 @@ This project adheres to a Code of Conduct. By participating, you are expected to
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/ecomjunction-platform.git
-   cd ecomjunction-platform
+   git clone https://github.com/YOUR_USERNAME/shopmatic-platform.git
+   cd shopmatic-platform
    ```
 
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/original/ecomjunction-platform.git
+   git remote add upstream https://github.com/original/shopmatic-platform.git
    ```
 
 4. **Install dependencies**:
@@ -268,7 +268,7 @@ If you need help:
 1. Check the [documentation](src/pages/Documentation.tsx)
 2. Search existing issues
 3. Join our community discussions
-4. Email us at info@ecomjunction.net
+4. Email us at info@shopmatic.net
 
 ## 🎉 Recognition
 
@@ -277,4 +277,4 @@ Contributors will be recognized in:
 - Release notes for significant contributions
 - Social media acknowledgments
 
-Thank you for contributing to eComJunction! 🚀
+Thank you for contributing to Shopmatic! 🚀

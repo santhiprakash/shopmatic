@@ -261,7 +261,7 @@ async function importToNeon(
 // ============================================
 
 async function main() {
-  console.log('🚀 eComJunction Neon Database Import');
+  console.log('🚀 Shopmatic Neon Database Import');
   console.log('==========================================\n');
 
   // Parse command line arguments

@@ -1,4 +1,4 @@
-# eComJunction Codebase Analysis Report
+# Shopmatic Codebase Analysis Report
 
 **Report Generated:** 2026-04-02  
 **Analysis Scope:** Frontend (React/Vite) + Backend (Express/PostgreSQL)  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The eComJunction platform is a SAAS application for influencers and affiliate marketers featuring AI-powered product extraction, team collaboration, and theme customization. The codebase demonstrates solid foundational architecture with React Context, TanStack Query, and Express REST API patterns. However, **several critical and high-severity issues must be addressed before production deployment**.
+The Shopmatic platform is a SAAS application for influencers and affiliate marketers featuring AI-powered product extraction, team collaboration, and theme customization. The codebase demonstrates solid foundational architecture with React Context, TanStack Query, and Express REST API patterns. However, **several critical and high-severity issues must be addressed before production deployment**.
 
 ### Key Findings at a Glance
 
@@ -367,7 +367,7 @@ BCRYPT_ROUNDS=12
 1. **Frontend Performance**
    ```bash
    # Run Lighthouse CI
-   npx lighthouse https://ecomjunction.net --output=json --output-path=./lighthouse-report.json
+   npx lighthouse https://shopmatic.net --output=json --output-path=./lighthouse-report.json
    
    # Analyze bundle
    npm install -D vite-bundle-analyzer

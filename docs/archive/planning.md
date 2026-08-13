@@ -3,7 +3,7 @@
 ## Comprehensive Planning Document
 
 ### Project Overview
-eComJunction is a SAAS platform designed for influencers and affiliate marketers to showcase and organize their product recommendations. The platform enables users to create personalized showcase pages with their affiliate products, organize them with categories and tags, and share them with their audience.
+Shopmatic is a SAAS platform designed for influencers and affiliate marketers to showcase and organize their product recommendations. The platform enables users to create personalized showcase pages with their affiliate products, organize them with categories and tags, and share them with their audience.
 
 ### Current Status
 **Database Setup**: ✅ Completed - Supabase database configured with complete schema

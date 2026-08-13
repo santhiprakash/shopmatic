@@ -1,6 +1,6 @@
 # Quick Start Guide - For New Team Members
 
-## Welcome to eComJunction! 👋
+## Welcome to Shopmatic! 👋
 
 This guide will get you up to speed quickly.
 
@@ -32,8 +32,8 @@ This guide will get you up to speed quickly.
 
 ```bash
 # Clone the repository
-git clone https://github.com/santhiprakash/ecomjunction.git
-cd ecomjunction
+git clone https://github.com/santhiprakash/shopmatic.git
+cd shopmatic
 
 # Install dependencies
 npm install
